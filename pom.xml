@@ -5,7 +5,11 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
 		<version>3.2.4</version>
+=======
+		<version>2.7.18</version>
+>>>>>>> fe5308a (Spring boot template)
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.yandex.practicum</groupId>
@@ -14,7 +18,11 @@
 	<name>filmorate</name>
 	<description>filmorate</description>
 	<properties>
+<<<<<<< HEAD
 		<java.version>21</java.version>
+=======
+		<java.version>11</java.version>
+>>>>>>> fe5308a (Spring boot template)
 	</properties>
 	<dependencies>
 		<dependency>
