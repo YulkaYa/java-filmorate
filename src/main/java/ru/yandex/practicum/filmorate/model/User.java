@@ -65,6 +65,8 @@ public class User {
         }
     }
 
+    /*Копируем в новый объект userBuilder сначала поля oldUser(тот, которого хотим обновить), затем добавляем только
+    обновленную информацию из newUser*/
     public static User buildNewUser(User oldUser, User newUser) throws IllegalAccessException {
         if (!oldUser.getId().equals(newUser.getId())) {
             throw new NotFoundException("Id пользователей не совпали");
@@ -75,7 +77,7 @@ public class User {
         for (Field field : fieldsOfUser) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
-                    if (!(field.get(newUser) == null)) {
+                    if (field.get(newUser) != null) {
                         field1.set(userBuilder, field.get(newUser));
                     }
                     break;

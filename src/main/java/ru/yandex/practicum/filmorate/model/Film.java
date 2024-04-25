@@ -45,6 +45,8 @@ public class Film {
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Long duration;
 
+    /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
+    обновленную информацию из newFilm*/
     public static Film buildNewFilm(Film oldFilm, Film newFilm) throws IllegalAccessException {
         if (!oldFilm.getId().equals(newFilm.getId())) {
             throw new NotFoundException("Id фильмов не совпали");
@@ -55,7 +57,7 @@ public class Film {
         for (Field field : fieldsOfFilm) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
-                    if (!(field.get(newFilm) == null)) {
+                    if (field.get(newFilm) != null) {
                         field1.set(filmBuilder, field.get(newFilm));
                     }
                     break;

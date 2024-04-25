@@ -17,7 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class UserTest {
+class UserTest {
 
     private final User userCreate = User.builder()
             .name("Name")
@@ -31,7 +31,7 @@ public class UserTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @AllArgsConstructor
-    static class ExpectedViolation {
+    private static class ExpectedViolation {
         String propertyPath;
         String message;
     }
@@ -64,8 +64,8 @@ public class UserTest {
 
     @Test
     void updateFailWhenIdNullTest() {
-        final User UserTest = userUpdate.toBuilder().id(null).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(UserTest,
+        final User userTest = userUpdate.toBuilder().id(null).build();
+        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Update.class));
         assertEquals(1, violations.size());
         UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
@@ -81,8 +81,8 @@ public class UserTest {
 
     @Test
     void updateFailedWhenIdZeroTest() {
-        User UserTest = userUpdate.toBuilder().id(0L).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(UserTest));
+        User userTest = userUpdate.toBuilder().id(0L).build();
+        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
         UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
@@ -97,8 +97,8 @@ public class UserTest {
 
     @Test
     void updateFailedWhenIdNegativeTest() {
-        User UserTest = userUpdate.toBuilder().id(-1L).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(UserTest));
+        User userTest = userUpdate.toBuilder().id(-1L).build();
+        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
         UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
