@@ -32,8 +32,8 @@ class UserTest {
 
     @AllArgsConstructor
     private static class ExpectedViolation {
-        String propertyPath;
-        String message;
+        private String propertyPath;
+        private String message;
     }
 
     @Test
@@ -51,7 +51,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
                 "id", "Id при создании пользователя должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,

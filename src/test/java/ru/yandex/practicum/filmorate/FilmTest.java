@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.yandex.practicum.filmorate.model.Create;
@@ -31,12 +30,6 @@ class FilmTest {
             .build();
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    @AllArgsConstructor
-    private static class ExpectedViolation {
-        String propertyPath;
-        String message;
-    }
-
     @Test
     void createOkWhenIdNullTest() {
         final Film filmTest = filmCreate.toBuilder().id(null).build();
@@ -52,8 +45,7 @@ class FilmTest {
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest,
                 Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
-                "id", "Id при создании фильма должен быть пустым");
+        ExpectedViolation expectedViolation = new ExpectedViolation("id", "Id при создании фильма должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
