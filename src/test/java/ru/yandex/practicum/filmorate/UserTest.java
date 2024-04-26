@@ -30,12 +30,6 @@ class UserTest {
             .build();
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    @AllArgsConstructor
-    private static class ExpectedViolation {
-        private String propertyPath;
-        private String message;
-    }
-
     @Test
     void createOkWhenIdNullTest() {
         final User userTest = userCreate.toBuilder().id(null).build();
@@ -51,7 +45,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id при создании пользователя должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -68,7 +62,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Update.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id при обновлении не должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -84,7 +78,7 @@ class UserTest {
         User userTest = userUpdate.toBuilder().id(0L).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -100,7 +94,7 @@ class UserTest {
         User userTest = userUpdate.toBuilder().id(-1L).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -119,7 +113,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -140,7 +134,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -159,7 +153,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -178,7 +172,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -219,7 +213,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -238,7 +232,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -257,7 +251,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -277,7 +271,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта не может быть пустой");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -298,7 +292,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта не может быть пустой");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -318,7 +312,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта должна содержать символ @ и соответствовать правилам " +
                 "названия email");
         assertEquals(
@@ -374,7 +368,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -393,7 +387,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -444,7 +438,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "birthday", "Дата рождения не может быть в будущем");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -465,7 +459,7 @@ class UserTest {
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
                 updatedUser));
         assertEquals(1, violations.size());
-        UserTest.ExpectedViolation expectedViolation = new UserTest.ExpectedViolation(
+        ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
