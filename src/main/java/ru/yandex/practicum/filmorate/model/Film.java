@@ -1,9 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -13,6 +11,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,18 +23,18 @@ import java.util.List;
  * дата релиза — releaseDate;
  * продолжительность фильма — duration.
  */
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
 public class Film extends StorageData {
-
-    @Null(groups = Create.class, message = "Id при создании должен быть пустым")
-    @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
-    @Positive(message = "Id должен быть положительным целым числом")
-    private Long id;
-
+    /*
+        @Null(groups = Create.class, message = "Id при создании должен быть пустым")
+        @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
+        @Positive(message = "Id должен быть положительным целым числом")
+        private Long id; todo
+    */
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
     @Pattern(regexp = ".*\\S+.*", message = "Название не может состоять из пробелов")
     private String name;
@@ -55,9 +54,16 @@ public class Film extends StorageData {
         if (!oldFilm.getId().equals(newFilm.getId())) {
             throw new NotFoundException("Id фильмов не совпали");
         }
-        Film.FilmBuilder filmBuilder = oldFilm.toBuilder();
+        FilmBuilder filmBuilder = oldFilm.toBuilder();
+        // Получаем суперкласс билдера со всеми полями
+        Class classWithDeclaredFields  = filmBuilder.getClass().getSuperclass();
+        List<Field> fieldsOfBuilderFromFilm = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
+        List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
+
         List<Field> fieldsOfFilm = List.of(newFilm.getClass().getDeclaredFields());
-        List<Field> fieldsOfBuilder = List.of(filmBuilder.getClass().getDeclaredFields());
+        fieldsOfBuilderFromFilm.addAll(fieldsOfBuilderFromStorageData);
+        List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromFilm);
+
         for (Field field : fieldsOfFilm) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
@@ -72,9 +78,6 @@ public class Film extends StorageData {
                 }
             }
         }
-/*        Film film = filmBuilder.build();
-        film.setId(newFilm.getId());
-        return film;todo*/
         return filmBuilder.build();
     }
 }

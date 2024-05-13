@@ -14,6 +14,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,17 +28,19 @@ import java.util.List;
  * имя для отображения — name;
  * дата рождения — birthday.
  */
-@Builder(toBuilder = true)
+@SuperBuilder(toBuilder = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
 public class User extends StorageData {
 
+/*
     @Null(groups = Create.class, message = "Id при создании должен быть пустым")
     @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
     @Positive(message = "Id должен быть положительным целым числом")
-    private Long id;
+    private Long id; todo
+*/
 
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
@@ -75,8 +80,16 @@ public class User extends StorageData {
             throw new NotFoundException("Id пользователей не совпали");
         }
         UserBuilder userBuilder = oldUser.toBuilder();
+        // Получаем суперкласс билдера со всеми полями
+       Class classWithDeclaredFields  = userBuilder.getClass().getSuperclass();
+       List<Field> fieldsOfBuilderFromUser = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
+       List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
+
+
         List<Field> fieldsOfUser = List.of(newUser.getClass().getDeclaredFields());
-        List<Field> fieldsOfBuilder = List.of(userBuilder.getClass().getDeclaredFields());
+        fieldsOfBuilderFromUser.addAll(fieldsOfBuilderFromStorageData);
+        List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromUser);
+
         for (Field field : fieldsOfUser) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
@@ -91,9 +104,6 @@ public class User extends StorageData {
                 }
             }
         }
-        /*User user = userBuilder.build();
-        user.setId(newUser.getId());
-        return user;todo*/
         return userBuilder.build();
     }
 }
