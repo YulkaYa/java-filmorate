@@ -45,7 +45,7 @@ class UserTest {
                 Create.class));
         assertEquals(1, violations.size());
         ExpectedViolation expectedViolation = new ExpectedViolation(
-                "id", "Id при создании пользователя должен быть пустым");
+                "id", "Id при создании должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
@@ -449,7 +449,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateFailedFieldNameEmptyTest() throws IllegalAccessException {
+    void checkUpdateFailedFieldNameEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = userUpdate.toBuilder()
                 .name("")
@@ -470,7 +470,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldNameNotEmptyTest() throws IllegalAccessException {
+    void checkUpdateOkFieldNameNotEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = userUpdate.toBuilder()
                 .name("fgtrytr")
@@ -487,7 +487,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotEmptyTest() throws IllegalAccessException {
+    void checkUpdateOkFieldsNotEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = User.builder()
                 .id(userTest.getId())

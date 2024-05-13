@@ -1,11 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
@@ -26,14 +30,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
-public class User {
-    @Null(groups = Create.class, message = "Id при создании пользователя должен быть пустым")
+public class User extends StorageData {
+
+    @Null(groups = Create.class, message = "Id при создании должен быть пустым")
     @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
     @Positive(message = "Id должен быть положительным целым числом")
     private Long id;
 
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
-
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;
 
@@ -46,7 +50,6 @@ public class User {
 
     @Past(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
-
 
     private void setLogin(String login) {
         this.login = login;
@@ -67,7 +70,7 @@ public class User {
 
     /*Копируем в новый объект userBuilder сначала поля oldUser(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newUser*/
-    public static User buildNewUser(User oldUser, User newUser) throws IllegalAccessException {
+    public static User buildNewUser(User oldUser, User newUser) {
         if (!oldUser.getId().equals(newUser.getId())) {
             throw new NotFoundException("Id пользователей не совпали");
         }
@@ -77,13 +80,20 @@ public class User {
         for (Field field : fieldsOfUser) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
-                    if (field.get(newUser) != null) {
-                        field1.set(userBuilder, field.get(newUser));
+                    try {
+                        if (field.get(newUser) != null) {
+                            field1.set(userBuilder, field.get(newUser));
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalAccessToModelException("Ошибка при обновлении данных пользователя");
                     }
                     break;
                 }
             }
         }
+        /*User user = userBuilder.build();
+        user.setId(newUser.getId());
+        return user;todo*/
         return userBuilder.build();
     }
 }

@@ -1,11 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
+import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
@@ -26,10 +29,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
-public class Film {
-    @Null(groups = Create.class, message = "Id при создании фильма должен быть пустым")
-    @NotNull(groups = Update.class, message = "Id при обновлении фильма не должен быть пустым")
-    @Positive(message = "Id фильма должен быть положительным целым числом")
+public class Film extends StorageData {
+
+    @Null(groups = Create.class, message = "Id при создании должен быть пустым")
+    @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
+    @Positive(message = "Id должен быть положительным целым числом")
     private Long id;
 
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
@@ -47,7 +51,7 @@ public class Film {
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/
-    public static Film buildNewFilm(Film oldFilm, Film newFilm) throws IllegalAccessException {
+    public static Film buildNewFilm(Film oldFilm, Film newFilm) {
         if (!oldFilm.getId().equals(newFilm.getId())) {
             throw new NotFoundException("Id фильмов не совпали");
         }
@@ -57,13 +61,20 @@ public class Film {
         for (Field field : fieldsOfFilm) {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
-                    if (field.get(newFilm) != null) {
-                        field1.set(filmBuilder, field.get(newFilm));
+                    try {
+                        if (field.get(newFilm) != null) {
+                            field1.set(filmBuilder, field.get(newFilm));
+                        }
+                    } catch (IllegalAccessException e) {
+                        throw new IllegalAccessToModelException("Ошибка при обновлении данных фильма");
                     }
                     break;
                 }
             }
         }
+/*        Film film = filmBuilder.build();
+        film.setId(newFilm.getId());
+        return film;todo*/
         return filmBuilder.build();
     }
 }
