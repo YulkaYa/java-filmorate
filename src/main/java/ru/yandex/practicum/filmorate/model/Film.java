@@ -4,6 +4,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
@@ -12,7 +13,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Film.
@@ -29,12 +32,7 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class Film extends StorageData {
-    /*
-        @Null(groups = Create.class, message = "Id при создании должен быть пустым")
-        @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
-        @Positive(message = "Id должен быть положительным целым числом")
-        private Long id; todo
-    */
+
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
     @Pattern(regexp = ".*\\S+.*", message = "Название не может состоять из пробелов")
     private String name;
@@ -47,6 +45,9 @@ public class Film extends StorageData {
 
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Long duration;
+
+    @Singular
+    private final Set<Long> likes = new HashSet<>();
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/

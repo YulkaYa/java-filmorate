@@ -2,10 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +11,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * User.
@@ -35,13 +29,6 @@ import java.util.List;
 @Slf4j
 public class User extends StorageData {
 
-/*
-    @Null(groups = Create.class, message = "Id при создании должен быть пустым")
-    @NotNull(groups = Update.class, message = "Id при обновлении не должен быть пустым")
-    @Positive(message = "Id должен быть положительным целым числом")
-    private Long id; todo
-*/
-
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;
@@ -55,6 +42,9 @@ public class User extends StorageData {
 
     @Past(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
+
+    @Singular
+    private final Set<Long> friends = new HashSet<>();
 
     private void setLogin(String login) {
         this.login = login;

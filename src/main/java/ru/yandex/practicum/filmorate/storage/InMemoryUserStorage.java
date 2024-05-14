@@ -22,7 +22,6 @@ public class InMemoryUserStorage extends StorageData implements UserStorage {
     private long idGenerator = 0L;
 
     @Override
-    @Validated(Create.class)
     public User create(User user) {
         // проверяем выполнение необходимых условий
         if (users.values().stream().anyMatch(user1 -> user1.getEmail().equals(user.getEmail()))) {
@@ -48,18 +47,18 @@ public class InMemoryUserStorage extends StorageData implements UserStorage {
             User oldUser = users.get(newUserId);
 /*            if (users.values().stream().anyMatch(user1 -> user1.getEmail().equals(newUser.getEmail()) && !user1.getId().equals(newUserId))) {
                 throw new DuplicatedDataException("Имейл " + newUser.getEmail() + " уже используется");
-            }*/
-            for ( User user : users.values()) {
+            } todo дописать тесты на проверку*/
+/*            for ( User user : users.values()) {
                 if (user.getEmail().equals(newUser.getEmail()) && !user.getId().equals(newUserId)) {
                     throw new DuplicatedDataException("Имейл " + newUser.getEmail() + " уже используется");
                 }
                 if (user.getLogin().equals(newUser.getLogin()) && !user.getId().equals(newUserId)) {
                     throw new DuplicatedDataException("Логин " + newUser.getLogin() + " уже используется");
                 }
-            }
+            }todo*/
 /*            if (users.values().stream().anyMatch(user1 -> user1.getLogin().equals(newUser.getLogin()) && !user1.getId().equals(newUserId))) {
                 throw new DuplicatedDataException("Логин " + newUser.getLogin() + " уже используется");
-            }*/
+            }todo*/
             User user = User.buildNewUser(oldUser, newUser);
             users.put(newUserId, user);
             log.info("Пользователь с id = " + newUserId + " обновлен");

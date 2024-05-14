@@ -22,8 +22,6 @@ public class InMemoryFilmStorage extends StorageData implements FilmStorage {
     private long idGenerator = 0L;
 
     @Override
-    @Validated(Create.class)
-    @Valid
     public Film create(Film film) {
         // формируем дополнительные данные
         film.setId(++idGenerator);
@@ -34,8 +32,6 @@ public class InMemoryFilmStorage extends StorageData implements FilmStorage {
     }
 
     @Override
-    @Validated(Update.class)
-    @Valid
     public Film update(Film newFilm) {
         // проверяем необходимые условия
         Long newFilmId = newFilm.getId();
