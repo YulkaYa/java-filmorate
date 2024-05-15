@@ -1,17 +1,24 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * User.
@@ -29,39 +36,18 @@ import java.util.*;
 @Slf4j
 public class User extends StorageData {
 
+    @Singular
+    private final Set<Long> friends = new HashSet<>();
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;
-
     @Pattern(regexp = ".*\\S+.*", message = "Имя не может состоять из пробелов или быть пустым")
     private String name;
-
     @NotBlank(groups = Create.class, message = "Электронная почта не может быть пустой")
     @Email(message = "Электронная почта должна содержать символ @ и соответствовать правилам названия email")
     private String email;
-
     @Past(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
-
-    @Singular
-    private final Set<Long> friends = new HashSet<>();
-
-    private void setLogin(String login) {
-        this.login = login;
-        replaceBlankNameWithLogin();
-    }
-
-    private void setName(String name) {
-        this.name = name;
-        replaceBlankNameWithLogin();
-    }
-
-    private void replaceBlankNameWithLogin() {
-        String nameOfUser = this.getName();
-        if (nameOfUser == null || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
-            this.setName(this.getLogin());
-        }
-    }
 
     /*Копируем в новый объект userBuilder сначала поля oldUser(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newUser*/
@@ -71,9 +57,9 @@ public class User extends StorageData {
         }
         UserBuilder userBuilder = oldUser.toBuilder();
         // Получаем суперкласс билдера со всеми полями
-       Class classWithDeclaredFields  = userBuilder.getClass().getSuperclass();
-       List<Field> fieldsOfBuilderFromUser = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
-       List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
+        Class classWithDeclaredFields = userBuilder.getClass().getSuperclass();
+        List<Field> fieldsOfBuilderFromUser = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
+        List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
 
 
         List<Field> fieldsOfUser = List.of(newUser.getClass().getDeclaredFields());
@@ -95,5 +81,22 @@ public class User extends StorageData {
             }
         }
         return userBuilder.build();
+    }
+
+    private void setLogin(String login) {
+        this.login = login;
+        replaceBlankNameWithLogin();
+    }
+
+    private void setName(String name) {
+        this.name = name;
+        replaceBlankNameWithLogin();
+    }
+
+    private void replaceBlankNameWithLogin() {
+        String nameOfUser = this.getName();
+        if (nameOfUser == null || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
+            this.setName(this.getLogin());
+        }
     }
 }

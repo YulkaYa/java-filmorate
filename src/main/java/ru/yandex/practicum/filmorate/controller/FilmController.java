@@ -13,7 +13,6 @@ import ru.yandex.practicum.filmorate.model.Update;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Функции FilmController:
@@ -26,6 +25,7 @@ import java.util.Set;
 @RequestMapping("/films")
 public class FilmController {
     FilmService filmService;
+
     @Autowired
     public FilmController(FilmService service) {
         this.filmService = service;
@@ -49,12 +49,12 @@ public class FilmController {
     @ResponseStatus(HttpStatus.OK)
     public List<Film> topFilms(@RequestParam(defaultValue = "10") int count) {
         log.info("Получаем список из " + count + " самых популярных фильмов");
-            if (count <= 0) {
-                throw new ValidationException("Параметр count должен быть больше нуля;");
-            } else {
-                return filmService.topFilms(count);
-            }
+        if (count <= 0) {
+            throw new ValidationException("Параметр count должен быть больше нуля;");
+        } else {
+            return filmService.topFilms(count);
         }
+    }
 
     @PostMapping
     @Validated(Create.class)

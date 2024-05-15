@@ -1,6 +1,9 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,21 +36,17 @@ import java.util.Set;
 @Slf4j
 public class Film extends StorageData {
 
+    @Singular
+    private final Set<Long> likes = new HashSet<>();
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
     @Pattern(regexp = ".*\\S+.*", message = "Название не может состоять из пробелов")
     private String name;
-
     @Size(max = 200, message = "Максимальная длина описания — 200 символов")
     private String description;
-
     @ReleaseDateConstraint
     private LocalDate releaseDate;
-
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Long duration;
-
-    @Singular
-    private final Set<Long> likes = new HashSet<>();
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/
@@ -57,7 +56,7 @@ public class Film extends StorageData {
         }
         FilmBuilder filmBuilder = oldFilm.toBuilder();
         // Получаем суперкласс билдера со всеми полями
-        Class classWithDeclaredFields  = filmBuilder.getClass().getSuperclass();
+        Class classWithDeclaredFields = filmBuilder.getClass().getSuperclass();
         List<Field> fieldsOfBuilderFromFilm = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
         List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
 

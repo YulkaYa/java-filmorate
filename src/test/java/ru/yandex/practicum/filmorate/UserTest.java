@@ -507,4 +507,3 @@ class UserTest {
         assertEquals(newUserTest.getName(), updatedUser.getName());
     }
 }
-

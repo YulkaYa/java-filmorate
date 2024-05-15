@@ -1,17 +1,12 @@
 package ru.yandex.practicum.filmorate.service;
 
-import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
-import ru.yandex.practicum.filmorate.model.Create;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Update;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
 
-import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,11 +49,12 @@ public class FilmService {
 
     public List<Film> topFilms(int count) {
         List<Film> films = filmStorage.getAll();
-        if(count > films.size()) {
+        if (count > films.size()) {
             count = films.size();
         }
         return films.stream().sorted((s1, s2) -> {
-            return s2.getLikes().size() - s1.getLikes().size();})
-                .collect(Collectors.toList()).subList(0,count);
+                    return s2.getLikes().size() - s1.getLikes().size();
+                })
+                .collect(Collectors.toList()).subList(0, count);
     }
 }
