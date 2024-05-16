@@ -14,46 +14,45 @@ repository for Filmorate project.
 
 ### Список файлов:
 
-| Пакет | Пакет |Файл |Описание |
-|--|--|--|--|
-|main.java.filmorate||||
-||controller||Контроллеры|
-|||ExceptionHandler||
-|||FilmController||
-|||UserController||
-||service||Сервисы, для операций с хранилищами данных|
-|||FilmService||
-|||UserService||
-||exception||Исключения|
-|||DuplicatedDataException||
-|||IllegalAccessToModelException||
-|||NotFoundException||
-||storage||Хранение данных, операции с объектами данных|
-|||FilmStorage||
-|||InMemoryFilmStorage||
-|||InMemoryUserStorage||
-|||Storage||
-|||UserStorage||
-| |model| |Модели данных|
-| ||Create||
-| ||ErrorResponse||
-| ||Film||
-| ||ReleaseDateConstraint||
-| ||ReleaseDateValidator||
-| ||StorageData||
-| ||Update||
-| ||User||
-|||FilmorateApplication||
-|main.resources||||
-|||application.properties||
-|test.java.filmorate||||
-|||ExpectedViolation||
-|||FilmTest||
-|||UserTest||
-|||storage||
-|||InMemoryUserStorageTest||
-
-| |README.md  |описание проекта|
+| Пакет               | Пакет      | Файл                          | Описание                                     |
+|---------------------|------------|-------------------------------|----------------------------------------------|
+| main.java.filmorate |                                              |     | Контроллеры                                  |
+|                     | controller |                               |                                              |
+|                     |            | ExceptionHandler              |                                              |
+|                     |            | FilmController                |                                              |
+|                     |            | UserController                |                                              |
+|                     | service    |                               | Сервисы, для операций с хранилищами данных   |
+|                     |            | FilmService                   |                                              |
+|                     |            | UserService                   |                                              |
+|                     | exception  |                               | Исключения                                   |
+|                     |            | DuplicatedDataException       |                                              |
+|                     |            | IllegalAccessToModelException |                                              |
+|                     |            | NotFoundException             |                                              |
+|                     | storage    |                               | Хранение данных, операции с объектами данных |
+|                     |            | FilmStorage                   |                                              |
+|                     |            | InMemoryFilmStorage           |                                              |
+|                     |            | InMemoryUserStorage           |                                              |
+|                     |            | Storage                       |                                              |
+|                     |            | UserStorage                   |                                              |
+|                     | model      |                               | Модели данных                                |
+|                     |            | Create                        |                                              |
+|                     |            | ErrorResponse                 |                                              |
+|                     |            | Film                          |                                              |
+|                     |            | ReleaseDateConstraint         |                                              |
+|                     |            | ReleaseDateValidator          |                                              |
+|                     |            | StorageData                   |                                              |
+|                     |            | Update                        |                                              |
+|                     |            | User                          |                                              |
+|                     |            | FilmorateApplication          |                                              |
+| main.resources      |            |                               | Настройки и пр ресурсы                       |
+|                     |            | application.properties        |                                              |
+| test.java.filmorate |            |                               | Тесты                                        |
+|                     |            | ExpectedViolation             |                                              |
+|                     |            | FilmTest                      |                                              |
+|                     |            | UserTest                      |                                              |
+|                     |            | storage                       |                                              |
+|                     |            | InMemoryUserStorageTest       |                                              |
+| README.md                    |            |                               | описание проекта                             |
 
 ### Автор:
 Юлия А.

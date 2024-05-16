@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-    Storage<Film> filmStorage;
-    Storage<User> userStorage;
+    private Storage<Film> filmStorage;
+    private Storage<User> userStorage;
 
     @Autowired
     public FilmService(Storage<Film> storage, Storage<User> userStorage) {
@@ -43,7 +43,7 @@ public class FilmService {
     }
 
     public void deleteLike(Long id, Long userId) {
-        userStorage.get(userId);
+        userStorage.get(userId); // Проверяем, что такой пользователь есть в списке
         filmStorage.get(id).getLikes().remove(userId);
     }
 
