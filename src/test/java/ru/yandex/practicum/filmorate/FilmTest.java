@@ -28,6 +28,7 @@ class FilmTest {
     private final Film filmUpdate = filmCreate.toBuilder()
             .id(1L)
             .build();
+
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
@@ -45,7 +46,7 @@ class FilmTest {
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest,
                 Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation("id", "Id при создании фильма должен быть пустым");
+        ExpectedViolation expectedViolation = new ExpectedViolation("id", "Id при создании должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
@@ -62,7 +63,7 @@ class FilmTest {
                 Update.class));
         assertEquals(1, violations.size());
         ExpectedViolation expectedViolation = new ExpectedViolation(
-                "id", "Id при обновлении фильма не должен быть пустым");
+                "id", "Id при обновлении не должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
@@ -78,7 +79,7 @@ class FilmTest {
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest));
         assertEquals(1, violations.size());
         ExpectedViolation expectedViolation = new ExpectedViolation(
-                "id", "Id фильма должен быть положительным целым числом");
+                "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
@@ -94,7 +95,7 @@ class FilmTest {
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest));
         assertEquals(1, violations.size());
         ExpectedViolation expectedViolation = new ExpectedViolation(
-                "id", "Id фильма должен быть положительным целым числом");
+                "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
                 violations.get(0).getPropertyPath().toString()
@@ -333,7 +334,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotChangedTest() throws IllegalAccessException {
+    void checkUpdateOkFieldsNotChangedTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())
@@ -350,7 +351,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldNameNotEmptyTest() throws IllegalAccessException {
+    void checkUpdateOkFieldNameNotEmptyTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())
@@ -368,7 +369,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotEmptyTest() throws IllegalAccessException {
+    void checkUpdateOkFieldsNotEmptyTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())
