@@ -60,12 +60,13 @@ public class UserController {
         return userService.update(newUser);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+/* todo    @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         log.info("Добавляем пользователю с id=" + id + " друга с id=" + friendId);
         userService.addFriend(id, friendId);
     }
+
 
     @DeleteMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -86,5 +87,5 @@ public class UserController {
     public List<User> getFriends(@PathVariable Long id) {
         log.info("Получаем друзей пользователя с id=" + id);
         return userService.getFriends(id);
-    }
+    }*/
 }

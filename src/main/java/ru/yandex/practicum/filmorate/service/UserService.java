@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.UserDbStorage;
 
 import java.util.List;
 import java.util.Set;
@@ -35,7 +36,8 @@ public class UserService {
         return userStorage.getAll();
     }
 
-    public List<User> getFriends(Long id) {
+
+/*    public List<User> getFriends(Long id) {
         Set<Long> friendsId = userStorage.get(id).getFriends();
         return userStorage.getAll().stream().filter(user -> friendsId.contains(user.getId())).collect(Collectors.toList());
     }
@@ -57,5 +59,5 @@ public class UserService {
     public void addFriend(Long id, Long friendId) {
         userStorage.get(id).getFriends().add(friendId);
         userStorage.get(friendId).getFriends().add(id);
-    }
+    }*/
 }

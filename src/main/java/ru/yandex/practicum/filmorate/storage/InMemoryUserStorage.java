@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public class InMemoryUserStorage extends StorageData implements UserStorage {
+public class InMemoryUserStorage implements UserStorage {
 
     private final Map<Long, User> users = new HashMap<>();
     private long idGenerator = 0L;

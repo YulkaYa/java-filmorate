@@ -36,8 +36,8 @@ import java.util.Set;
 @Slf4j
 public class User extends StorageData {
 
-    @Singular
-    private final Set<Long> friends = new HashSet<>();
+/*  todo  @Singular
+    private final Set<Long> friends = new HashSet<>();*/
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;

@@ -12,6 +12,7 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
+import ru.yandex.practicum.filmorate.storage.MpaDao;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -47,6 +48,7 @@ public class Film extends StorageData {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Long duration;
+    private MpaDao mpa;
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/
