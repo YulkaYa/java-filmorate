@@ -60,13 +60,12 @@ public class UserController {
         return userService.update(newUser);
     }
 
-/* todo    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
         log.info("Добавляем пользователю с id=" + id + " друга с id=" + friendId);
         userService.addFriend(id, friendId);
     }
-
 
     @DeleteMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -75,17 +74,17 @@ public class UserController {
         userService.deleteFromFriends(id, friendId);
     }
 
+    @GetMapping("/{id}/friends")
+    @ResponseStatus(HttpStatus.OK)
+    public List<User> getFriends(@PathVariable Long id) {
+        log.info("Получаем друзей пользователя с id=" + id);
+        return userService.getFriends(id);
+    }
+
     @GetMapping("/{id}/friends/common/{otherId}")
     @ResponseStatus(HttpStatus.OK)
     public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
         log.info("Получаем общих друзей пользователей с id=" + id + " и с id=" + otherId);
         return userService.getCommonFriends(id, otherId);
     }
-
-    @GetMapping("/{id}/friends")
-    @ResponseStatus(HttpStatus.OK)
-    public List<User> getFriends(@PathVariable Long id) {
-        log.info("Получаем друзей пользователя с id=" + id);
-        return userService.getFriends(id);
-    }*/
 }
