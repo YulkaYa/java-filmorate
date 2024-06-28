@@ -1,39 +1,121 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.Mpa;
 
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Primary
 @RequiredArgsConstructor
 @Component
 public class FilmDbStorage implements FilmStorage {
+    private final JdbcTemplate jdbcTemplate;
+    private static GenresFilmsDao genresFilmsDao;
+    private static MpaDao mpaDao;
+
+    @Autowired
+    public FilmDbStorage(GenresFilmsDao genresFilmsDao, MpaDao mpaDao, JdbcTemplate jdbcTemplate) {
+        this.genresFilmsDao = genresFilmsDao;
+        this.mpaDao = mpaDao;
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     @Override
     public Film create(Film data) {
-        return null;
+        final String sqlQuery = """
+                insert into films (
+                     name, description, releaseDate, duration, mpa_id
+                ) 
+                values (?, ?, ?, ?, ?)
+                """;
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        try {
+            Mpa mpa = mpaDao.get(data.getMpa().getId());
+            data.setMpa(mpa);
+        } catch (NotFoundException e) {
+            throw new IllegalArgumentException("Ошибка добавления mpa_id = " + data.getMpa().getId());
+        }
+        jdbcTemplate.update(connection -> {
+            PreparedStatement stmt = connection.prepareStatement(sqlQuery, new String[]{"film_id"});
+            stmt.setString(1, data.getName());
+            stmt.setString(2, data.getDescription());
+            stmt.setDate(3, Date.valueOf(data.getReleaseDate()));
+            stmt.setLong(4, data.getDuration());
+            stmt.setInt(5, data.getMpa().getId());
+            return stmt;
+        }, keyHolder);
+        data.setId(keyHolder.getKey().longValue());
+        if (!data.getGenres().isEmpty()) {
+            genresFilmsDao.addFilmGenre(data);
+        }
+        return data;
     }
 
     @Override
     public Film update(Film data) {
-        return null;
+        get(data.getId());
+        String sqlQuery =
+                "update films SET name = ?, releaseDate = ?, duration = ?, description = ?, mpa_id = ? WHERE film_id = ?";
+        jdbcTemplate.update(
+                sqlQuery,
+                data.getName(),
+                Date.valueOf(data.getReleaseDate()),
+                data.getDuration(),
+                data.getDescription(),
+                data.getMpa().getId(),
+                data.getId()
+        );
+        return data;
     }
 
     @Override
     public Film get(long id) {
-        return null;
+        final String sqlQuery = "select * from films WHERE film_id = ?";
+        final List<Film> films = jdbcTemplate.query(sqlQuery, FilmDbStorage::makeFilm, id);
+        if (films.size() != 1) {
+            throw new NotFoundException("film_id=" + id);
+        }
+        return films.get(0);
     }
 
     @Override
     public void delete(long id) {
-
+        final String sqlQuery = "delete * from films where film_id = ?";
+        jdbcTemplate.update(sqlQuery, id);
     }
 
     @Override
     public List<Film> getAll() {
-        return null;
+        return jdbcTemplate.query("select * from films", FilmDbStorage::makeFilm);
+    }
+
+    static Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        Film film = Film.builder()
+                .id(rs.getLong("film_id"))
+                .name(rs.getString("name"))
+                .description(rs.getString("description"))
+                .releaseDate(rs.getDate("releaseDate").toLocalDate())
+                .duration(rs.getLong("duration"))
+                .genres(new ArrayList<>())
+                .build();
+        if (rs.getInt("mpa_id") != 0) {
+            film.setMpa(mpaDao.get(rs.getInt("mpa_id")));
+        }
+        film.setGenres(genresFilmsDao.getFilmGenre(film.getId()));
+        return film;
     }
 }

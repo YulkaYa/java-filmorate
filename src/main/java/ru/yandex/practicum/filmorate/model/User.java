@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
@@ -16,9 +15,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User.
@@ -36,8 +33,6 @@ import java.util.Set;
 @Slf4j
 public class User extends StorageData {
 
-/*  todo  @Singular
-    private final Set<Long> friends = new HashSet<>();*/
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;

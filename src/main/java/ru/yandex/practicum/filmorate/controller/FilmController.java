@@ -72,18 +72,18 @@ public class FilmController {
         return filmService.update(newFilm);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping("/{filmId}/like/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void putLike(@PathVariable Long id, @PathVariable Long userId) {
-        log.info("Добавляем лайк к фильму с id=" + id + " от юзера с id=" + userId);
-        filmService.putLike(id, userId);
+    public void putLike(@PathVariable Long filmId, @PathVariable Long userId) {
+        log.info("Добавляем лайк к фильму с id=" + filmId + " от юзера с id=" + userId);
+        filmService.putLike(userId, filmId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping("/{filmId}/like/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
-        log.info("Удаляем лайк к фильму с id=" + id + " от юзера с id=" + userId);
-        filmService.deleteLike(id, userId);
+    public void deleteLike(@PathVariable Long filmId, @PathVariable Long id) {
+        log.info("Удаляем лайк к фильму с id=" + filmId + " от юзера с id=" + id);
+        filmService.deleteLike(id, filmId);
     }
 }
 
