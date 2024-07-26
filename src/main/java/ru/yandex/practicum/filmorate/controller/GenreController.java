@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/genres")
 public class GenreController {
-    private GenreService genreService;
+    private final GenreService genreService;
 
     @Autowired
     public GenreController(GenreService service) {
@@ -30,7 +30,7 @@ public class GenreController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Genre get(@PathVariable Integer id) {
-        log.info("Получаем жанр с id=" + id);
+        log.info("Получаем жанр с id={}", id);
         return genreService.get(id);
     }
 }

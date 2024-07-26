@@ -22,15 +22,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class FilmDbStorage implements FilmStorage {
-    private final JdbcTemplate jdbcTemplate;
     private static GenresFilmsDao genresFilmsDao;
     private static MpaDao mpaDao;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public FilmDbStorage(GenresFilmsDao genresFilmsDao, MpaDao mpaDao, JdbcTemplate jdbcTemplate) {
-        this.genresFilmsDao = genresFilmsDao;
-        this.mpaDao = mpaDao;
+    public FilmDbStorage(final GenresFilmsDao genresFilmsDao, final MpaDao mpaDao, final JdbcTemplate jdbcTemplate) {
+        FilmDbStorage.genresFilmsDao = genresFilmsDao;
+        FilmDbStorage.mpaDao = mpaDao;
         this.jdbcTemplate = jdbcTemplate;
+    }
+
+    static Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
+        Film film = Film.builder().id(rs.getLong("film_id")).name(rs.getString("name")).description(rs.getString("description")).releaseDate(rs.getDate("releaseDate").toLocalDate()).duration(rs.getLong("duration")).genres(new ArrayList<>()).build();
+        if (0 != rs.getInt("mpa_id")) {
+            film.setMpa(mpaDao.get(rs.getInt("mpa_id")));
+        }
+        film.setGenres(GenresFilmsDao.getFilmGenre(film.getId()));
+        return film;
     }
 
     @Override
@@ -60,7 +69,7 @@ public class FilmDbStorage implements FilmStorage {
         }, keyHolder);
         data.setId(keyHolder.getKey().longValue());
         if (!data.getGenres().isEmpty()) {
-            genresFilmsDao.addFilmGenre(data);
+            GenresFilmsDao.addFilmGenre(data);
         }
         return data;
     }
@@ -68,17 +77,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film update(Film data) {
         get(data.getId());
-        String sqlQuery =
-                "update films SET name = ?, releaseDate = ?, duration = ?, description = ?, mpa_id = ? WHERE film_id = ?";
-        jdbcTemplate.update(
-                sqlQuery,
-                data.getName(),
-                Date.valueOf(data.getReleaseDate()),
-                data.getDuration(),
-                data.getDescription(),
-                data.getMpa().getId(),
-                data.getId()
-        );
+        final String sqlQuery = "update films SET name = ?, releaseDate = ?, duration = ?, description = ?, mpa_id = ? WHERE film_id = ?";
+        jdbcTemplate.update(sqlQuery, data.getName(), Date.valueOf(data.getReleaseDate()), data.getDuration(), data.getDescription(), data.getMpa().getId(), data.getId());
         return data;
     }
 
@@ -86,7 +86,7 @@ public class FilmDbStorage implements FilmStorage {
     public Film get(long id) {
         final String sqlQuery = "select * from films WHERE film_id = ?";
         final List<Film> films = jdbcTemplate.query(sqlQuery, FilmDbStorage::makeFilm, id);
-        if (films.size() != 1) {
+        if (1 != films.size()) {
             throw new NotFoundException("film_id=" + id);
         }
         return films.get(0);
@@ -94,28 +94,12 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public void delete(long id) {
-        final String sqlQuery = "delete * from films where film_id = ?";
+        final String sqlQuery = "delete from films where film_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
 
     @Override
     public List<Film> getAll() {
         return jdbcTemplate.query("select * from films", FilmDbStorage::makeFilm);
-    }
-
-    static Film makeFilm(ResultSet rs, int rowNum) throws SQLException {
-        Film film = Film.builder()
-                .id(rs.getLong("film_id"))
-                .name(rs.getString("name"))
-                .description(rs.getString("description"))
-                .releaseDate(rs.getDate("releaseDate").toLocalDate())
-                .duration(rs.getLong("duration"))
-                .genres(new ArrayList<>())
-                .build();
-        if (rs.getInt("mpa_id") != 0) {
-            film.setMpa(mpaDao.get(rs.getInt("mpa_id")));
-        }
-        film.setGenres(genresFilmsDao.getFilmGenre(film.getId()));
-        return film;
     }
 }

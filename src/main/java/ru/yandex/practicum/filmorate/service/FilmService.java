@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 public class FilmService {
-    private FilmStorage filmStorage;
-    private LikesDao likesDao;
+    private final FilmStorage filmStorage;
+    private final LikesDao likesDao;
 
     @Autowired
     public FilmService(FilmStorage filmStorage, LikesDao likesDao) {

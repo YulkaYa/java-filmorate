@@ -24,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @Autowired
     public FilmController(FilmService service) {
@@ -41,15 +41,15 @@ public class FilmController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Film get(@PathVariable Long id) {
-        log.info("Получаем фильм с id=" + id);
+        log.info("Получаем фильм с id={}", id);
         return filmService.get(id);
     }
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
     public List<Film> topFilms(@RequestParam(defaultValue = "10") int count) {
-        log.info("Получаем список из " + count + " самых популярных фильмов");
-        if (count <= 0) {
+        log.info("Получаем список из {} самых популярных фильмов", count);
+        if (0 >= count) {
             throw new ValidationException("Параметр count должен быть больше нуля;");
         } else {
             return filmService.topFilms(count);
@@ -60,7 +60,7 @@ public class FilmController {
     @Validated(Create.class)
     @ResponseStatus(HttpStatus.CREATED)
     public Film create(@Valid @RequestBody Film film) {
-        log.info("Создаем новый фильм с id=" + film.getId());
+        log.info("Создаем новый фильм с id={}", film.getId());
         return filmService.create(film);
     }
 
@@ -68,21 +68,21 @@ public class FilmController {
     @Validated(Update.class)
     @ResponseStatus(HttpStatus.OK)
     public Film update(@Valid @RequestBody Film newFilm) {
-        log.info("Обновляем фильм с id=" + newFilm.getId());
+        log.info("Обновляем фильм с id={}", newFilm.getId());
         return filmService.update(newFilm);
     }
 
     @PutMapping("/{filmId}/like/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void putLike(@PathVariable Long filmId, @PathVariable Long userId) {
-        log.info("Добавляем лайк к фильму с id=" + filmId + " от юзера с id=" + userId);
+        log.info("Добавляем лайк к фильму с id={} от юзера с id={}", filmId, userId);
         filmService.putLike(userId, filmId);
     }
 
     @DeleteMapping("/{filmId}/like/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteLike(@PathVariable Long filmId, @PathVariable Long id) {
-        log.info("Удаляем лайк к фильму с id=" + filmId + " от юзера с id=" + id);
+        log.info("Удаляем лайк к фильму с id={} от юзера с id={}", filmId, id);
         filmService.deleteLike(id, filmId);
     }
 }

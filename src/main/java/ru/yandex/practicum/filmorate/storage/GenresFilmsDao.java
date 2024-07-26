@@ -2,7 +2,6 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
@@ -11,7 +10,6 @@ import ru.yandex.practicum.filmorate.model.Genre;
 
 import java.util.List;
 
-@Primary
 @RequiredArgsConstructor
 @Component
 public class GenresFilmsDao {
@@ -20,8 +18,8 @@ public class GenresFilmsDao {
 
     @Autowired
     public GenresFilmsDao(GenreDao genreDao, JdbcTemplate jdbcTemplate) {
-        this.genreDao = genreDao;
-        this.jdbcTemplate = jdbcTemplate;
+        GenresFilmsDao.genreDao = genreDao;
+        GenresFilmsDao.jdbcTemplate = jdbcTemplate;
     }
 
     public static List<Genre> getFilmGenre(Long filmId) {

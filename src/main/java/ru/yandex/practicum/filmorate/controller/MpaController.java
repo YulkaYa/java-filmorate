@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/mpa")
 public class MpaController {
-    private MpaService mpaService;
+    private final MpaService mpaService;
 
     @Autowired
     public MpaController(MpaService service) {
@@ -35,7 +35,7 @@ public class MpaController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mpa get(@PathVariable Integer id) {
-        log.info("Получаем жанр с id=" + id);
+        log.info("Получаем жанр с id={}", id);
         return mpaService.get(id);
     }
 }

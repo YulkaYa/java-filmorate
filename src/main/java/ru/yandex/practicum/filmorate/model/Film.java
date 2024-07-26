@@ -12,15 +12,11 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
 import ru.yandex.practicum.filmorate.exception.NotFoundException;
-import ru.yandex.practicum.filmorate.storage.GenreDao;
-import ru.yandex.practicum.filmorate.storage.MpaDao;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Film.
@@ -38,8 +34,6 @@ import java.util.Set;
 @Slf4j
 public class Film extends StorageData {
 
-/*  todo @Singular
-    private final Set<Long> likes = new HashSet<>();*/
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
     @Pattern(regexp = ".*\\S+.*", message = "Название не может состоять из пробелов")
     private String name;
@@ -73,8 +67,8 @@ public class Film extends StorageData {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
-                        if (field.get(newFilm) != null) {
-                            if (!(field.getName().equals("genres") && field.get(newFilm).toString().equals("[]"))) {
+                        if (null != field.get(newFilm)) {
+                            if (!("genres".equals(field.getName()) && "[]".equals(field.get(newFilm).toString()))) {
                                 field1.set(filmBuilder, field.get(newFilm));
                             }
                         }

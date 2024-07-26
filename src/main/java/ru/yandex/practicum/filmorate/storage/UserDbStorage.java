@@ -21,9 +21,19 @@ import java.util.List;
 public class UserDbStorage implements UserStorage {
     private final JdbcTemplate jdbcTemplate;
 
+    static User makeUser(ResultSet rs, int rowNum) throws SQLException {
+        return User.builder()
+                .id(rs.getLong("user_id"))
+                .birthday(rs.getDate("birthday").toLocalDate())
+                .login(rs.getString("login"))
+                .name(rs.getString("name"))
+                .email(rs.getString("email"))
+                .build();
+    }
+
     @Override
     public User create(User data) {
-        String sqlQuery = """
+        final String sqlQuery = """
                 insert into users (
                      name, birthday, login, email
                 ) 
@@ -47,7 +57,7 @@ public class UserDbStorage implements UserStorage {
     public User update(User data) {
         User userFromBase = get(data.getId());
         User updatedUser = User.buildNewUser(userFromBase, data);
-        String sqlQuery =
+        final String sqlQuery =
                 "update users SET name = ?, birthday = ?, login = ?, email = ? WHERE user_id = ?";
         jdbcTemplate.update(
                 sqlQuery,
@@ -64,7 +74,7 @@ public class UserDbStorage implements UserStorage {
     public User get(long id) {
         final String sqlQuery = "select * from users WHERE user_id = ?";
         final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
-        if (users.size() != 1) {
+        if (1 != users.size()) {
             throw new NotFoundException("user_id=" + id);
         }
         return users.get(0);
@@ -72,22 +82,12 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void delete(long id) {
-        final String sqlQuery = "delete * from users where user_id = ?";
+        final String sqlQuery = "delete from users where user_id = ?";
         jdbcTemplate.update(sqlQuery, id);
     }
 
     @Override
     public List<User> getAll() {
         return jdbcTemplate.query("select * from users", UserDbStorage::makeUser);
-    }
-
-    static User makeUser(ResultSet rs, int rowNum) throws SQLException {
-        return User.builder()
-                .id(rs.getLong("user_id"))
-                .birthday(rs.getDate("birthday").toLocalDate())
-                .login(rs.getString("login"))
-                .name(rs.getString("name"))
-                .email(rs.getString("email"))
-                .build();
     }
 }

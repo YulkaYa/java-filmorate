@@ -1,13 +1,10 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.model.Create;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Update;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,7 +29,7 @@ class FilmTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
-    void createOkWhenIdNullTest() {
+    protected void createOkWhenIdNullTest() {
         final Film filmTest = filmCreate.toBuilder().id(null).build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest,
                 Create.class));
@@ -40,7 +37,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenIdNotNullTest() {
+    protected void createFailedWhenIdNotNullTest() {
         Film filmTest = filmCreate.toBuilder().id(1000L).build();
 
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest,
@@ -57,7 +54,7 @@ class FilmTest {
     }
 
     @Test
-    void updateFailWhenIdNullTest() {
+    protected void updateFailWhenIdNullTest() {
         final Film filmTest = filmUpdate.toBuilder().id(null).build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest,
                 Update.class));
@@ -74,7 +71,7 @@ class FilmTest {
     }
 
     @Test
-    void updateFailedWhenIdZeroTest() {
+    protected void updateFailedWhenIdZeroTest() {
         Film filmTest = filmUpdate.toBuilder().id(0L).build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest));
         assertEquals(1, violations.size());
@@ -90,7 +87,7 @@ class FilmTest {
     }
 
     @Test
-    void updateFailedWhenIdNegativeTest() {
+    protected void updateFailedWhenIdNegativeTest() {
         Film filmTest = filmUpdate.toBuilder().id(-1L).build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(filmTest));
         assertEquals(1, violations.size());
@@ -106,7 +103,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenNameNullTest() {
+    protected void createFailedWhenNameNullTest() {
         Film filmTest = filmCreate.toBuilder()
                 .name(null)
                 .build();
@@ -125,7 +122,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenNameIsAbsentTest() {
+    protected void createFailedWhenNameIsAbsentTest() {
         Film filmTest = Film.builder()
                 .description(filmCreate.getDescription())
                 .duration(filmCreate.getDuration())
@@ -146,7 +143,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenNameIsEmptyTest() {
+    protected void createFailedWhenNameIsEmptyTest() {
         Film filmTest = filmCreate.toBuilder().name("").build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(
                 filmTest));
@@ -163,7 +160,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenNameIsBlankTest() {
+    protected void createFailedWhenNameIsBlankTest() {
         Film filmTest = filmCreate.toBuilder()
                 .name("  ")
                 .build();
@@ -182,7 +179,7 @@ class FilmTest {
     }
 
     @Test
-    void updateOkWhenNameNullTest() {
+    protected void updateOkWhenNameNullTest() {
         final Film filmTest = filmUpdate.toBuilder()
                 .name(null)
                 .build();
@@ -191,7 +188,7 @@ class FilmTest {
     }
 
     @Test
-    void updateOkWhenNameAbsentTest() {
+    protected void updateOkWhenNameAbsentTest() {
         final Film filmTest = Film.builder()
                 .id(filmUpdate.getId())
                 .description(filmUpdate.getDescription())
@@ -204,7 +201,7 @@ class FilmTest {
     }
 
     @Test
-    void createOkWhenDescriptionNullTest() {
+    protected void createOkWhenDescriptionNullTest() {
         Film filmTest = filmCreate.toBuilder().description(null).build();
         List<ConstraintViolation<Film>> violations = new ArrayList<>(validator.validate(
                 filmTest));
@@ -212,7 +209,7 @@ class FilmTest {
     }
 
     @Test
-    void createOkWhenDescriptionIsAbsentTest() {
+    protected void createOkWhenDescriptionIsAbsentTest() {
         Film filmTest = Film.builder()
                 .name(filmCreate.getName())
                 .duration(filmCreate.getDuration())
@@ -224,7 +221,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenDescriptionMoreThanExpectedTest() {
+    protected void createFailedWhenDescriptionMoreThanExpectedTest() {
         Film filmTest = filmCreate.toBuilder()
                 .description(filmCreate.getDescription() + "d")
                 .build();
@@ -243,7 +240,7 @@ class FilmTest {
     }
 
     @Test
-    void createOkWhenReleaseDateAbsentTest() {
+    protected void createOkWhenReleaseDateAbsentTest() {
         Film filmTest = Film.builder()
                 .name(filmCreate.getName())
                 .description(filmCreate.getDescription())
@@ -255,7 +252,7 @@ class FilmTest {
     }
 
     @Test
-    void createOkWhenReleaseDateInFutureTest() {
+    protected void createOkWhenReleaseDateInFutureTest() {
         Film filmTest = filmCreate.toBuilder()
                 .releaseDate(LocalDate.now().plusDays(1))
                 .build();
@@ -265,7 +262,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailWhenReleaseDateBeforeDateOfCreationOfCinematographyTest() {
+    protected void createFailWhenReleaseDateBeforeDateOfCreationOfCinematographyTest() {
         Film filmTest = filmCreate.toBuilder()
                 .releaseDate(LocalDate.of(1895, 12, 27))
                 .build();
@@ -284,7 +281,7 @@ class FilmTest {
     }
 
     @Test
-    void createOkWhenDurationAbsentTest() {
+    protected void createOkWhenDurationAbsentTest() {
         final Film filmTest = Film.builder()
                 .name(filmCreate.getName())
                 .description(filmCreate.getDescription())
@@ -296,7 +293,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenDurationNegativeTest() {
+    protected void createFailedWhenDurationNegativeTest() {
         final Film filmTest = filmCreate.toBuilder()
                 .duration(-1L)
                 .build();
@@ -315,7 +312,7 @@ class FilmTest {
     }
 
     @Test
-    void createFailedWhenDurationZeroTest() {
+    protected void createFailedWhenDurationZeroTest() {
         final Film filmTest = filmCreate.toBuilder()
                 .duration(0L)
                 .build();
@@ -334,7 +331,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotChangedTest() {
+    protected void checkUpdateOkFieldsNotChangedTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())
@@ -351,7 +348,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldNameNotEmptyTest() {
+    protected void checkUpdateOkFieldNameNotEmptyTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())
@@ -369,7 +366,7 @@ class FilmTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotEmptyTest() {
+    protected void checkUpdateOkFieldsNotEmptyTest() {
         final Film filmTest = filmUpdate.toBuilder().build();
         final Film newFilmTest = Film.builder()
                 .id(filmTest.getId())

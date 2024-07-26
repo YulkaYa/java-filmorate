@@ -15,20 +15,20 @@ import java.util.List;
 public class GenreDao {
     private final JdbcTemplate jdbcTemplate;
 
-    public Genre get(int id) throws NotFoundException {
-        final String sqlQuery = "select * from genres WHERE genre_id = ?";
-        final List<Genre> genres = jdbcTemplate.query(sqlQuery, GenreDao::makeGenre, id);
-        if (genres.size() != 1) {
-            throw new NotFoundException("genre_id=" + id);
-        }
-        return genres.get(0);
-    }
-
     static Genre makeGenre(ResultSet rs, int rowNum) throws SQLException {
         return Genre.builder()
                 .id(rs.getInt("genre_id"))
                 .name(rs.getString("name"))
                 .build();
+    }
+
+    public Genre get(int id) throws NotFoundException {
+        final String sqlQuery = "select * from genres WHERE genre_id = ?";
+        final List<Genre> genres = jdbcTemplate.query(sqlQuery, GenreDao::makeGenre, id);
+        if (1 != genres.size()) {
+            throw new NotFoundException("genre_id=" + id);
+        }
+        return genres.get(0);
     }
 
     public List<Genre> getAll() {

@@ -65,7 +65,7 @@ public class User extends StorageData {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
-                        if (field.get(newUser) != null) {
+                        if (null != field.get(newUser)) {
                             field1.set(userBuilder, field.get(newUser));
                         }
                     } catch (IllegalAccessException e) {
@@ -89,9 +89,9 @@ public class User extends StorageData {
     }
 
     private void replaceBlankNameWithLogin() {
-        String nameOfUser = this.getName();
-        if (nameOfUser == null || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
-            this.setName(this.getLogin());
+        String nameOfUser = this.name;
+        if (null == nameOfUser || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
+            this.setName(this.login);
         }
     }
 }

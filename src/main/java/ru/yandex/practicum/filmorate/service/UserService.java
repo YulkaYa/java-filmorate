@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private UserStorage userStorage;
-    private FriendshipDao friendshipDao;
+    private final UserStorage userStorage;
+    private final FriendshipDao friendshipDao;
 
     @Autowired
     public UserService(UserStorage userStorage, FriendshipDao friendshipDao) {
