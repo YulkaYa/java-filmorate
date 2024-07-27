@@ -84,7 +84,7 @@ class UserDBStorageTests {
         // Удаляем 1 из них
         userStorage.delete(1L);
 
-        // Проверяем что остался 1 юзер 
+        // Проверяем что остался 1 юзер
         assertEquals(1, userStorage.getAll().size());
     }
 

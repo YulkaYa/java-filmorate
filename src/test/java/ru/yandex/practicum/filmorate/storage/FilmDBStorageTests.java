@@ -94,7 +94,6 @@ class FilmDBStorageTests {
     @Test
     @Sql(scripts = {SQL_SCRIPT_ONE_FILM_IN_DB})
     protected void get() {
-        Film user = filmStorage.get(0L);
         List<Film> films = filmStorage.getAll();
         List<Genre> genres = films.get(0).getGenres();
         assertEquals(0, genres.size());

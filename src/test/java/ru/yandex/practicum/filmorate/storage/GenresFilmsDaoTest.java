@@ -27,7 +27,7 @@ class GenresFilmsDaoTest {
 
     @BeforeEach
     protected void getAllGenres() {
-       genresTypesList = genreDao.getAll();
+        genresTypesList = genreDao.getAll();
     }
 
     @Test
