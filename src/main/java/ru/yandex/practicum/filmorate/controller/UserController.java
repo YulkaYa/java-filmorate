@@ -30,7 +30,7 @@ public class UserController {
 
     @Autowired
     public UserController(UserService service) {
-        this.userService = service;
+        userService = service;
     }
 
     @GetMapping

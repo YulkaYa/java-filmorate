@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage;
 
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +34,8 @@ class GenresFilmsDaoTest {
     protected void getFilmGenre() {
         List<Genre> genreList = GenresFilmsDao.getFilmGenre(0L);
         assertEquals(0, genreList.size());
-        final Film film = this.filmStorage.get(0L);
-        film.setGenres(List.of(this.genresTypesList.get(3), this.genresTypesList.get(1)));
+        final Film film = filmStorage.get(0L);
+        film.setGenres(List.of(genresTypesList.get(3), genresTypesList.get(1)));
         GenresFilmsDao.addFilmGenre(film);
         genreList = GenresFilmsDao.getFilmGenre(0L);
         assertEquals(2, genreList.size());
@@ -46,15 +45,15 @@ class GenresFilmsDaoTest {
 
     @Test
     protected void addFilmGenre() {
-        final Film film = this.filmStorage.get(0L);
-        film.setGenres(List.of(this.genresTypesList.get(3), this.genresTypesList.get(1)));
+        final Film film = filmStorage.get(0L);
+        film.setGenres(List.of(genresTypesList.get(3), genresTypesList.get(1)));
         GenresFilmsDao.addFilmGenre(film);
         List<Genre> genreList = GenresFilmsDao.getFilmGenre(0L);
         assertEquals(2, genreList.size());
         assertEquals(new Genre(4, "Триллер"), genreList.get(0));
         assertEquals(new Genre(2, "Драма"), genreList.get(1));
 
-        genreList.add(this.genresTypesList.get(2));
+        genreList.add(genresTypesList.get(2));
         film.setGenres(genreList);
         GenresFilmsDao.addFilmGenre(film);
         genreList = GenresFilmsDao.getFilmGenre(0L);

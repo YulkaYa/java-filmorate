@@ -22,7 +22,7 @@ public class MpaController {
 
     @Autowired
     public MpaController(MpaService service) {
-        this.mpaService = service;
+        mpaService = service;
     }
 
     @GetMapping

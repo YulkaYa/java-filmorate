@@ -16,7 +16,7 @@ public class FriendshipDao {
 
     @Autowired
     public FriendshipDao(Storage<User> storage, JdbcTemplate jdbcTemplate) {
-        this.userStorage = storage;
+        userStorage = storage;
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -30,8 +30,7 @@ public class FriendshipDao {
     public List<User> getFriends(Long id) {
         userStorage.get(id);
         final String sqlQuery = "select * from users as u join friendship as f on  u.user_id = f.friend_id where f.user_id = ?";
-        final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
-        return users;
+        return jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id);
     }
 
     public void deleteFromFriends(Long id, Long friendId) {
@@ -43,7 +42,6 @@ public class FriendshipDao {
 
     public List<User> getCommonFriends(Long id, Long otherId) {
         final String sqlQuery = "select * from users where user_id in (select friend_id from friendship where user_id in (?, ?) GROUP BY friend_id having count (friend_id)>1)";
-        final List<User> users = jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id, otherId);
-        return users;
+        return jdbcTemplate.query(sqlQuery, UserDbStorage::makeUser, id, otherId);
     }
 }

@@ -21,14 +21,14 @@ class MpaDaoTest {
 
     @Test
     protected void get() {
-        final Mpa mpa = this.mpaDao.get(1);
+        final Mpa mpa = mpaDao.get(1);
         assertEquals(1, mpa.getId());
         assertEquals("G", mpa.getName());
     }
 
     @Test
     protected void getAll() {
-        final List<Mpa> mpas = this.mpaDao.getAll();
+        final List<Mpa> mpas = mpaDao.getAll();
         assertEquals("G", mpas.get(0).getName());
         assertEquals("PG", mpas.get(1).getName());
         assertEquals("PG-13", mpas.get(2).getName());

@@ -17,7 +17,7 @@ public class GenreController {
 
     @Autowired
     public GenreController(GenreService service) {
-        this.genreService = service;
+        genreService = service;
     }
 
     @GetMapping

@@ -89,9 +89,9 @@ public class User extends StorageData {
     }
 
     private void replaceBlankNameWithLogin() {
-        String nameOfUser = this.name;
+        String nameOfUser = name;
         if (null == nameOfUser || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
-            this.setName(this.login);
+            setName(login);
         }
     }
 }

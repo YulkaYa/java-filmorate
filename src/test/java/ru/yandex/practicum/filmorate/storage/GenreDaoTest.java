@@ -21,14 +21,14 @@ class GenreDaoTest {
 
     @Test
     protected void get() {
-        final Genre genre = this.genreDao.get(1);
+        final Genre genre = genreDao.get(1);
         assertEquals(1, genre.getId());
         assertEquals("Комедия", genre.getName());
     }
 
     @Test
     protected void getAll() {
-        final List<Genre> genres = this.genreDao.getAll();
+        final List<Genre> genres = genreDao.getAll();
         assertEquals("Комедия", genres.get(0).getName());
         assertEquals("Драма", genres.get(1).getName());
         assertEquals("Мультфильм", genres.get(2).getName());

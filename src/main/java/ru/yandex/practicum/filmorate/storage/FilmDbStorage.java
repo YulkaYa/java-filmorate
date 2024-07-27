@@ -47,8 +47,7 @@ public class FilmDbStorage implements FilmStorage {
         final String sqlQuery = """
                 insert into films (
                      name, description, releaseDate, duration, mpa_id
-                ) 
-                values (?, ?, ?, ?, ?)
+                ) values (?, ?, ?, ?, ?)
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -67,7 +66,11 @@ public class FilmDbStorage implements FilmStorage {
             stmt.setInt(5, data.getMpa().getId());
             return stmt;
         }, keyHolder);
-        data.setId(keyHolder.getKey().longValue());
+        try {
+            data.setId(keyHolder.getKey().longValue());
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Ошибка при добавлении id");
+        }
         if (!data.getGenres().isEmpty()) {
             GenresFilmsDao.addFilmGenre(data);
         }

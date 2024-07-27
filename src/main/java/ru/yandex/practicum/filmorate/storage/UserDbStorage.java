@@ -36,8 +36,7 @@ public class UserDbStorage implements UserStorage {
         final String sqlQuery = """
                 insert into users (
                      name, birthday, login, email
-                ) 
-                values (?, ?, ?, ?)
+                ) values (?, ?, ?, ?)
                 """;
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -49,7 +48,11 @@ public class UserDbStorage implements UserStorage {
             stmt.setString(4, data.getEmail());
             return stmt;
         }, keyHolder);
-        data.setId(keyHolder.getKey().longValue());
+        try {
+            data.setId(keyHolder.getKey().longValue());
+        } catch (NullPointerException e) {
+            throw new RuntimeException("Ошибка при добавлении id");
+        }
         return data;
     }
 
