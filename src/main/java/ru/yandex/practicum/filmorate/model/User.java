@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
@@ -16,9 +15,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User.
@@ -36,8 +33,6 @@ import java.util.Set;
 @Slf4j
 public class User extends StorageData {
 
-    @Singular
-    private final Set<Long> friends = new HashSet<>();
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;
@@ -70,7 +65,7 @@ public class User extends StorageData {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
-                        if (field.get(newUser) != null) {
+                        if (null != field.get(newUser)) {
                             field1.set(userBuilder, field.get(newUser));
                         }
                     } catch (IllegalAccessException e) {
@@ -94,9 +89,9 @@ public class User extends StorageData {
     }
 
     private void replaceBlankNameWithLogin() {
-        String nameOfUser = this.getName();
-        if (nameOfUser == null || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
-            this.setName(this.getLogin());
+        String nameOfUser = name;
+        if (null == nameOfUser || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
+            setName(login);
         }
     }
 }

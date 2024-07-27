@@ -16,9 +16,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Film.
@@ -36,8 +34,6 @@ import java.util.Set;
 @Slf4j
 public class Film extends StorageData {
 
-    @Singular
-    private final Set<Long> likes = new HashSet<>();
     @NotBlank(groups = Create.class, message = "Название не должно быть null или состоять из пробелов")
     @Pattern(regexp = ".*\\S+.*", message = "Название не может состоять из пробелов")
     private String name;
@@ -47,6 +43,9 @@ public class Film extends StorageData {
     private LocalDate releaseDate;
     @Positive(message = "Продолжительность фильма должна быть положительным числом")
     private Long duration;
+    private Mpa mpa;
+    @Singular
+    private List<Genre> genres = new ArrayList<>();
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/
@@ -68,8 +67,10 @@ public class Film extends StorageData {
             for (Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
-                        if (field.get(newFilm) != null) {
-                            field1.set(filmBuilder, field.get(newFilm));
+                        if (null != field.get(newFilm)) {
+                            if (!("genres".equals(field.getName()) && "[]".equals(field.get(newFilm).toString()))) {
+                                field1.set(filmBuilder, field.get(newFilm));
+                            }
                         }
                     } catch (IllegalAccessException e) {
                         throw new IllegalAccessToModelException("Ошибка при обновлении данных фильма");

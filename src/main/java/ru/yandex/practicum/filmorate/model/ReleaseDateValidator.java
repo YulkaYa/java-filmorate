@@ -14,7 +14,7 @@ public class ReleaseDateValidator implements
     @Override
     public boolean isValid(LocalDate releaseDate,
                            ConstraintValidatorContext cxt) {
-        if (releaseDate == null) {
+        if (null == releaseDate) {
             return true;
         }
         if (!(releaseDate instanceof LocalDate)) {

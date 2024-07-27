@@ -1,13 +1,10 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.model.Create;
-import ru.yandex.practicum.filmorate.model.Update;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -30,7 +27,7 @@ class UserTest {
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
-    void createOkWhenIdNullTest() {
+    protected void createOkWhenIdNullTest() {
         final User userTest = userCreate.toBuilder().id(null).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Create.class));
@@ -38,7 +35,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenIdNotNullTest() {
+    protected void createFailedWhenIdNotNullTest() {
         User userTest = userCreate.toBuilder().id(1000L).build();
 
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
@@ -56,7 +53,7 @@ class UserTest {
     }
 
     @Test
-    void updateFailWhenIdNullTest() {
+    protected void updateFailWhenIdNullTest() {
         final User userTest = userUpdate.toBuilder().id(null).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
                 Update.class));
@@ -73,7 +70,7 @@ class UserTest {
     }
 
     @Test
-    void updateFailedWhenIdZeroTest() {
+    protected void updateFailedWhenIdZeroTest() {
         User userTest = userUpdate.toBuilder().id(0L).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
@@ -89,7 +86,7 @@ class UserTest {
     }
 
     @Test
-    void updateFailedWhenIdNegativeTest() {
+    protected void updateFailedWhenIdNegativeTest() {
         User userTest = userUpdate.toBuilder().id(-1L).build();
         List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
         assertEquals(1, violations.size());
@@ -105,7 +102,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginNullTest() {
+    protected void createFailedWhenLoginNullTest() {
         User userTest = userCreate.toBuilder()
                 .login(null)
                 .build();
@@ -124,7 +121,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginAbsentTest() {
+    protected void createFailedWhenLoginAbsentTest() {
         User userTest = User.builder()
                 .name(userCreate.getName())
                 .email(userCreate.getEmail())
@@ -145,7 +142,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginEmptyTest() {
+    protected void createFailedWhenLoginEmptyTest() {
         User userTest = userCreate.toBuilder()
                 .login("")
                 .build();
@@ -164,7 +161,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginBlankTest() {
+    protected void createFailedWhenLoginBlankTest() {
         User userTest = userCreate.toBuilder()
                 .login(" ")
                 .build();
@@ -183,7 +180,7 @@ class UserTest {
     }
 
     @Test
-    void updateOkWhenLoginNullTest() {
+    protected void updateOkWhenLoginNullTest() {
         User userTest = userUpdate.toBuilder()
                 .login(null)
                 .build();
@@ -193,7 +190,7 @@ class UserTest {
     }
 
     @Test
-    void updateOkWhenLoginAbsentTest() {
+    protected void updateOkWhenLoginAbsentTest() {
         User userTest = User.builder()
                 .name(userCreate.getName())
                 .email(userCreate.getEmail())
@@ -205,7 +202,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginEmptyTest() {
+    protected void createOrUpdateFailedWhenLoginEmptyTest() {
         User userTest = userUpdate.toBuilder()
                 .login("")
                 .build();
@@ -224,7 +221,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginBlankTest() {
+    protected void createOrUpdateFailedWhenLoginBlankTest() {
         User userTest = userUpdate.toBuilder()
                 .login(" ")
                 .build();
@@ -243,7 +240,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginContainsSpacesTest() {
+    protected void createOrUpdateFailedWhenLoginContainsSpacesTest() {
         User userTest = userUpdate.toBuilder()
                 .login("login login")
                 .build();
@@ -263,7 +260,7 @@ class UserTest {
 
 
     @Test
-    void createFailedWhenEmailNullTest() {
+    protected void createFailedWhenEmailNullTest() {
         User userTest = userCreate.toBuilder()
                 .email(null)
                 .build();
@@ -282,7 +279,7 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenEmailAbsentTest() {
+    protected void createFailedWhenEmailAbsentTest() {
         User userTest = User.builder()
                 .name(userCreate.getName())
                 .birthday(userCreate.getBirthday())
@@ -304,7 +301,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenEmailNotFitPatternTest() {
+    protected void createOrUpdateFailedWhenEmailNotFitPatternTest() {
         User userTest = userCreate.toBuilder()
                 .email("@mail.ru")
                 .build();
@@ -325,7 +322,7 @@ class UserTest {
 
 
     @Test
-    void updateOkWhenEmailNullTest() {
+    protected void updateOkWhenEmailNullTest() {
         User userTest = userUpdate.toBuilder()
                 .email(null)
                 .build();
@@ -335,7 +332,7 @@ class UserTest {
     }
 
     @Test
-    void updateOkWhenEmailAbsentTest() {
+    protected void updateOkWhenEmailAbsentTest() {
         User userTest = User.builder()
                 .id(userUpdate.getId())
                 .login(userUpdate.getLogin())
@@ -348,7 +345,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateOkWhenNameContainsSpacesTest() {
+    protected void createOrUpdateOkWhenNameContainsSpacesTest() {
         User userTest = userCreate.toBuilder()
                 .name("name null")
                 .build();
@@ -360,7 +357,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenNameBlankTest() {
+    protected void createOrUpdateFailedWhenNameBlankTest() {
         User userTest = userCreate.toBuilder()
                 .name("")
                 .build();
@@ -379,7 +376,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenNameContainsOnlySpacesTest() {
+    protected void createOrUpdateFailedWhenNameContainsOnlySpacesTest() {
         User userTest = userCreate.toBuilder()
                 .name(" ")
                 .build();
@@ -398,7 +395,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayAbsentTest() {
+    protected void createOrUpdateOkWhenBirthdayAbsentTest() {
         User userTest = User.builder()
                 .name(userCreate.getName())
                 .login(userCreate.getLogin())
@@ -410,7 +407,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayNullTest() {
+    protected void createOrUpdateOkWhenBirthdayNullTest() {
         User userTest = userCreate.toBuilder()
                 .birthday(null)
                 .build();
@@ -420,7 +417,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayInPresentTest() {
+    protected void createOrUpdateOkWhenBirthdayInPresentTest() {
         User userTest = userCreate.toBuilder()
                 .birthday(LocalDate.now())
                 .build();
@@ -430,7 +427,7 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenBirthdayInFutureTest() {
+    protected void createOrUpdateFailedWhenBirthdayInFutureTest() {
         User userTest = userCreate.toBuilder()
                 .birthday(LocalDate.now().plusDays(1))
                 .build();
@@ -449,7 +446,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateFailedFieldNameEmptyTest() {
+    protected void checkUpdateFailedFieldNameEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = userUpdate.toBuilder()
                 .name("")
@@ -470,7 +467,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldNameNotEmptyTest() {
+    protected void checkUpdateOkFieldNameNotEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = userUpdate.toBuilder()
                 .name("fgtrytr")
@@ -487,7 +484,7 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotEmptyTest() {
+    protected void checkUpdateOkFieldsNotEmptyTest() {
         final User userTest = userUpdate.toBuilder().build();
         final User newUserTest = User.builder()
                 .id(userTest.getId())
