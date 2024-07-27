@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = {LikesDao.class, UserDbStorage.class, FilmDbStorage.class, GenresFilmsDao.class, GenreDao.class, MpaDao.class})
 class LikesDaoTest {
     private final LikesDao likesDao;
-    private final String SQL_SCRIPT_SOME_FILMS_USERS_IN_DB = "/tests/likes/some-films-users.sql";
+    private static final String SQL_SCRIPT_SOME_FILMS_USERS_IN_DB = "/tests/likes/some-films-users.sql";
 
     @Test
     @Sql(scripts = {SQL_SCRIPT_SOME_FILMS_USERS_IN_DB})

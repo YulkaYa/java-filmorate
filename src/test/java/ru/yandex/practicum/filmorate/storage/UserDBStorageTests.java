@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = UserDbStorage.class)
 class UserDBStorageTests {
     private final UserDbStorage userStorage;
-    private final String SQL_SCRIPT_ONE_USER_IN_DB = "/tests/users/user.sql";
-    private final String SQL_SCRIPT_SOME_USERS_IN_DB = "/tests/users/some-users.sql";
+    private static final String SQL_SCRIPT_ONE_USER_IN_DB = "/tests/users/user.sql";
+    private static final String SQL_SCRIPT_SOME_USERS_IN_DB = "/tests/users/some-users.sql";
 
     @Test
     @Sql(scripts = SQL_SCRIPT_ONE_USER_IN_DB)
