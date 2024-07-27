@@ -24,8 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class FilmDBStorageTests {
 
     private final FilmDbStorage filmStorage;
-    private final String SQL_SCRIPT_ONE_FILM_IN_DB = "/tests/films/film.sql";
-    private final String SQL_SCRIPT_SOME_FILMS_IN_DB = "/tests/films/some-films.sql";
+    private static final String SQL_SCRIPT_ONE_FILM_IN_DB = "/tests/films/film.sql";
+    private static final String SQL_SCRIPT_SOME_FILMS_IN_DB = "/tests/films/some-films.sql";
 
     @Test
     @Sql(scripts = {SQL_SCRIPT_ONE_FILM_IN_DB})
