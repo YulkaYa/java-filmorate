@@ -2,6 +2,8 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,13 +49,9 @@ public class FilmController {
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
-    public List<Film> topFilms(@RequestParam(defaultValue = "10") int count) {
+    public List<Film> topFilms(@RequestParam(defaultValue = "10") @Positive(message = "Параметр count должен быть больше нуля;" ) int count) {
         log.info("Получаем список из {} самых популярных фильмов", count);
-        if (0 >= count) {
-            throw new ValidationException("Параметр count должен быть больше нуля;");
-        } else {
             return filmService.topFilms(count);
-        }
     }
 
     @PostMapping
