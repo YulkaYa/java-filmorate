@@ -1,55 +1,50 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.FriendshipDao;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.base.interfaces.UserStorage;
+import ru.yandex.practicum.filmorate.storage.relations.interfaces.FriendshipStorage;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserService {
     private final UserStorage userStorage;
-    private final FriendshipDao friendshipDao;
+    private final FriendshipStorage friendshipStorage;
 
-    @Autowired
-    public UserService(UserStorage userStorage, FriendshipDao friendshipDao) {
-        this.userStorage = userStorage;
-        this.friendshipDao = friendshipDao;
-    }
-
-    public User create(User user) {
-        userStorage.create(user);
+    public User create(final User user) {
+        this.userStorage.create(user);
         return user;
     }
 
-    public User get(Long id) {
-        return userStorage.get(id);
+    public User get(final Long id) {
+        return this.userStorage.get(id);
     }
 
-    public User update(User user) {
-        return userStorage.update(user);
+    public User update(final User user) {
+        return this.userStorage.update(user);
     }
 
     public List<User> getAll() {
-        return userStorage.getAll();
+        return this.userStorage.getAll();
     }
 
-    public List<User> getFriends(Long id) {
-        return friendshipDao.getFriends(id);
+    public List<User> getFriends(final Long id) {
+        return this.friendshipStorage.getRelations(id);
     }
 
-    public void addFriend(Long id, Long friendId) {
-        friendshipDao.addFriend(id, friendId);
+    public void addFriend(final Long id, final Long friendId) {
+        this.friendshipStorage.addRelation(id, friendId);
     }
 
-    public void deleteFromFriends(Long id, Long friendId) {
-        friendshipDao.deleteFromFriends(id, friendId);
+    public void deleteFromFriends(final Long id, final Long friendId) {
+        this.friendshipStorage.deleteRelation(id, friendId);
     }
 
-    public List<User> getCommonFriends(Long id, Long otherId) {
-        return friendshipDao.getCommonFriends(id, otherId);
+    public List<User> getCommonFriends(final Long id, final Long otherId) {
+        return this.friendshipStorage.getCommonFriends(id, otherId);
     }
-
 }

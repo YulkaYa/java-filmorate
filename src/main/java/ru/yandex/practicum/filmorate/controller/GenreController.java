@@ -16,21 +16,21 @@ public class GenreController {
     private final GenreService genreService;
 
     @Autowired
-    public GenreController(GenreService service) {
-        genreService = service;
+    public GenreController(final GenreService service) {
+        this.genreService = service;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Genre> findAll() {
-        log.info("Получаем список всех жанров");
-        return genreService.getAll();
+        GenreController.log.info("Получаем список всех жанров");
+        return this.genreService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Genre get(@PathVariable Integer id) {
-        log.info("Получаем жанр с id={}", id);
-        return genreService.get(id);
+    public Genre get(@PathVariable final Long id) {
+        GenreController.log.info("Получаем жанр с id={}", id);
+        return this.genreService.get(id);
     }
 }

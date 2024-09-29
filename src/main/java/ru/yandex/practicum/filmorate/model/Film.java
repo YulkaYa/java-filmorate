@@ -49,22 +49,22 @@ public class Film extends StorageData {
 
     /*Копируем в новый объект filmBuilder сначала поля oldFilm(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newFilm*/
-    public static Film buildNewFilm(Film oldFilm, Film newFilm) {
+    public static Film buildNewFilm(final Film oldFilm, final Film newFilm) {
         if (!oldFilm.getId().equals(newFilm.getId())) {
             throw new NotFoundException("Id фильмов не совпали");
         }
-        FilmBuilder filmBuilder = oldFilm.toBuilder();
+        final FilmBuilder filmBuilder = oldFilm.toBuilder();
         // Получаем суперкласс билдера со всеми полями
-        Class classWithDeclaredFields = filmBuilder.getClass().getSuperclass();
-        List<Field> fieldsOfBuilderFromFilm = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
-        List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
+        final Class classWithDeclaredFields = filmBuilder.getClass().getSuperclass();
+        final List<Field> fieldsOfBuilderFromFilm = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
+        final List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
 
-        List<Field> fieldsOfFilm = List.of(newFilm.getClass().getDeclaredFields());
+        final List<Field> fieldsOfFilm = List.of(newFilm.getClass().getDeclaredFields());
         fieldsOfBuilderFromFilm.addAll(fieldsOfBuilderFromStorageData);
-        List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromFilm);
+        final List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromFilm);
 
-        for (Field field : fieldsOfFilm) {
-            for (Field field1 : fieldsOfBuilder) {
+        for (final Field field : fieldsOfFilm) {
+            for (final Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
                         if (null != field.get(newFilm)) {
@@ -72,7 +72,7 @@ public class Film extends StorageData {
                                 field1.set(filmBuilder, field.get(newFilm));
                             }
                         }
-                    } catch (IllegalAccessException e) {
+                    } catch (final IllegalAccessException e) {
                         throw new IllegalAccessToModelException("Ошибка при обновлении данных фильма");
                     }
                     break;

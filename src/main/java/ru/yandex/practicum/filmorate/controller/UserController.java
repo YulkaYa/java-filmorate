@@ -29,65 +29,65 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService service) {
-        userService = service;
+    public UserController(final UserService service) {
+        this.userService = service;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<User> findAll() {
-        log.info("Получаем список всех пользователей");
-        return userService.getAll();
+        UserController.log.info("Получаем список всех пользователей");
+        return this.userService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User get(@PathVariable Long id) {
-        log.info("Получаем пользователя с id={}", id);
-        return userService.get(id);
+    public User get(@PathVariable final Long id) {
+        UserController.log.info("Получаем пользователя с id={}", id);
+        return this.userService.get(id);
     }
 
     @PostMapping
     @Validated(Create.class)
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Valid @RequestBody User user) {
-        log.info("Создаем нового пользователя с id={}", user.getId());
-        return userService.create(user);
+    public User create(@Valid @RequestBody final User user) {
+        UserController.log.info("Создаем нового пользователя с id={}", user.getId());
+        return this.userService.create(user);
     }
 
     @PutMapping
     @Validated(Update.class)
     @ResponseStatus(HttpStatus.OK)
-    public User update(@Valid @RequestBody User newUser) {
-        log.info("Обновляем пользователя с id={}", newUser.getId());
-        return userService.update(newUser);
+    public User update(@Valid @RequestBody final User newUser) {
+        UserController.log.info("Обновляем пользователя с id={}", newUser.getId());
+        return this.userService.update(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void addFriend(@PathVariable Long id, @PathVariable Long friendId) {
-        log.info("Добавляем пользователю с id={} друга с id={}", id, friendId);
-        userService.addFriend(id, friendId);
+    public void addFriend(@PathVariable final Long id, @PathVariable final Long friendId) {
+        UserController.log.info("Добавляем пользователю с id={} друга с id={}", id, friendId);
+        this.userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteFromFriends(@PathVariable Long id, @PathVariable Long friendId) {
-        log.info("Удаляем из друзей пользователя с id={} друга с id={}", id, friendId);
-        userService.deleteFromFriends(id, friendId);
+    public void deleteFromFriends(@PathVariable final Long id, @PathVariable final Long friendId) {
+        UserController.log.info("Удаляем из друзей пользователя с id={} друга с id={}", id, friendId);
+        this.userService.deleteFromFriends(id, friendId);
     }
 
     @GetMapping("/{id}/friends")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getFriends(@PathVariable Long id) {
-        log.info("Получаем друзей пользователя с id={}", id);
-        return userService.getFriends(id);
+    public List<User> getFriends(@PathVariable final Long id) {
+        UserController.log.info("Получаем друзей пользователя с id={}", id);
+        return this.userService.getFriends(id);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<User> getCommonFriends(@PathVariable Long id, @PathVariable Long otherId) {
-        log.info("Получаем общих друзей пользователей с id={} и с id={}", id, otherId);
-        return userService.getCommonFriends(id, otherId);
+    public List<User> getCommonFriends(@PathVariable final Long id, @PathVariable final Long otherId) {
+        UserController.log.info("Получаем общих друзей пользователей с id={} и с id={}", id, otherId);
+        return this.userService.getCommonFriends(id, otherId);
     }
 }

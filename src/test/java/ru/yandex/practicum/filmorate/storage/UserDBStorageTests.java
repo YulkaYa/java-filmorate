@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.base.UserDbStorage;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,15 +21,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @ContextConfiguration(classes = UserDbStorage.class)
 class UserDBStorageTests {
-    private final UserDbStorage userStorage;
     private static final String SQL_SCRIPT_ONE_USER_IN_DB = "/tests/users/user.sql";
     private static final String SQL_SCRIPT_SOME_USERS_IN_DB = "/tests/users/some-users.sql";
+    private final UserDbStorage userStorage;
 
     @Test
-    @Sql(scripts = SQL_SCRIPT_ONE_USER_IN_DB)
+    @Sql(scripts = UserDBStorageTests.SQL_SCRIPT_ONE_USER_IN_DB)
     protected void createUser() {
         // Имеем 1 юзер в БД
-        userStorage.create(
+        this.userStorage.create(
                 User.builder()
                         .id(1L)
                         .name("user1")
@@ -36,7 +37,7 @@ class UserDBStorageTests {
                         .email("email@mail.ru")
                         .birthday(LocalDate.of(1985, 12, 28))
                         .build());
-        final List<User> users = userStorage.getAll();
+        List<User> users = this.userStorage.getAll();
         assertEquals(2, users.size());
         assertThat(users.get(1)).hasFieldOrPropertyWithValue("login", "userLogin");
         assertThat(users.get(1)).hasFieldOrPropertyWithValue("name", "user1");
@@ -46,18 +47,18 @@ class UserDBStorageTests {
 
 
     @Test
-    @Sql(scripts = SQL_SCRIPT_SOME_USERS_IN_DB)
+    @Sql(scripts = UserDBStorageTests.SQL_SCRIPT_SOME_USERS_IN_DB)
     protected void updateUser() {
         // Имеем 2 юзера в БД
-        final User userUpdated = User.builder()
+        User userUpdated = User.builder()
                 .id(1L)
                 .name("userUpdated")
                 .login("userUpdatedLogin")
                 .email("emailUpdated@mail.ru")
                 .birthday(LocalDate.of(1986, 12, 28))
                 .build();
-        userStorage.update(userUpdated);
-        final List<User> users = userStorage.getAll();
+        this.userStorage.update(userUpdated);
+        List<User> users = this.userStorage.getAll();
         assertEquals(2, users.size());
         assertThat(users.get(1)).hasFieldOrPropertyWithValue("login", "userUpdatedLogin");
         assertThat(users.get(1)).hasFieldOrPropertyWithValue("name", "userUpdated");
@@ -66,9 +67,9 @@ class UserDBStorageTests {
     }
 
     @Test
-    @Sql(scripts = SQL_SCRIPT_ONE_USER_IN_DB)
+    @Sql(scripts = UserDBStorageTests.SQL_SCRIPT_ONE_USER_IN_DB)
     protected void get() {
-        final User user = userStorage.get(0L);
+        User user = this.userStorage.get(0L);
         assertThat(user).hasFieldOrPropertyWithValue("login", "testLogin");
         assertThat(user).hasFieldOrPropertyWithValue("name", "nameOfZeroUser");
         assertThat(user).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1988, 12, 28));
@@ -76,22 +77,22 @@ class UserDBStorageTests {
     }
 
     @Test
-    @Sql(scripts = SQL_SCRIPT_SOME_USERS_IN_DB)
+    @Sql(scripts = UserDBStorageTests.SQL_SCRIPT_SOME_USERS_IN_DB)
     protected void delete() {
         // Имеем 2 юзера в БД
-        assertEquals(2, userStorage.getAll().size());
+        assertEquals(2, this.userStorage.getAll().size());
 
         // Удаляем 1 из них
-        userStorage.delete(1L);
+        this.userStorage.delete(1L);
 
         // Проверяем что остался 1 юзер
-        assertEquals(1, userStorage.getAll().size());
+        assertEquals(1, this.userStorage.getAll().size());
     }
 
     @Test
-    @Sql(scripts = SQL_SCRIPT_SOME_USERS_IN_DB)
+    @Sql(scripts = UserDBStorageTests.SQL_SCRIPT_SOME_USERS_IN_DB)
     protected void getAll() {
-        final List<User> users = userStorage.getAll();
+        List<User> users = this.userStorage.getAll();
         assertEquals(2, users.size());
         assertThat(users.get(0)).hasFieldOrPropertyWithValue("id", 0L);
         assertThat(users.get(0)).hasFieldOrPropertyWithValue("login", "testLogin");

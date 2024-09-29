@@ -1,11 +1,11 @@
 create table if not exists genres (
-    genre_id integer not null primary key auto_increment,
+    genre_id bigint not null primary key auto_increment,
     name varchar(255) not null unique,
     constraint genre_pk primary key (genre_id)
 );
 
 create table if not exists MPA (
-    mpa_id integer not null primary key auto_increment,
+    mpa_id bigint not null primary key auto_increment,
     name varchar(255) not null unique,
     constraint mpa_pk primary key (mpa_id)
 );
@@ -32,7 +32,7 @@ create table if not exists users (
 );
 
 create table if not exists genres_films (
-    genre_id integer not null,
+    genre_id bigint not null,
     film_id bigint not null,
     constraint genres_films_pk primary key (genre_id, film_id),
     constraint genres_films_fk_g foreign key (genre_id) references genres(genre_id) on delete cascade,
