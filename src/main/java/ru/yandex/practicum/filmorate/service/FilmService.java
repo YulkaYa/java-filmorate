@@ -1,60 +1,46 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.Storage;
+import ru.yandex.practicum.filmorate.storage.base.interfaces.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.relations.interfaces.LikesStorage;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class FilmService {
-    private Storage<Film> filmStorage;
-    private Storage<User> userStorage;
+    private final FilmStorage filmStorage;
+    private final LikesStorage likesStorage;
 
-    @Autowired
-    public FilmService(Storage<Film> storage, Storage<User> userStorage) {
-        this.filmStorage = storage;
-        this.userStorage = userStorage;
-    }
-
-    public Film create(Film film) {
-        filmStorage.create(film);
+    public Film create(final Film film) {
+        this.filmStorage.create(film);
         return film;
     }
 
-    public Film get(Long id) {
-        return filmStorage.get(id);
+    public Film get(final Long id) {
+        return this.filmStorage.get(id);
     }
 
-    public Film update(Film film) {
-        return filmStorage.update(film);
+    public Film update(final Film film) {
+        return this.filmStorage.update(film);
     }
 
     public List<Film> getAll() {
-        return filmStorage.getAll();
+        return this.filmStorage.getAll();
     }
 
-    public void putLike(Long id, Long userId) {
-        userStorage.get(userId);
-        filmStorage.get(id).getLikes().add(userId);
+    public void putLike(final Long userId, final Long filmId) {
+        this.likesStorage.addRelation(userId, filmId);
     }
 
-    public void deleteLike(Long id, Long userId) {
-        userStorage.get(userId); // Проверяем, что такой пользователь есть в списке
-        filmStorage.get(id).getLikes().remove(userId);
+    public void deleteLike(final Long userId, final Long filmId) {
+        this.likesStorage.deleteRelation(userId, filmId);
     }
 
-    public List<Film> topFilms(int count) {
-        List<Film> films = filmStorage.getAll();
-        if (count > films.size()) {
-            count = films.size();
-        }
-        return films.stream().sorted((s1, s2) -> {
-                    return s2.getLikes().size() - s1.getLikes().size();
-                })
-                .collect(Collectors.toList()).subList(0, count);
+    public List<Film> topFilms(final Long count) {
+        return this.likesStorage.topFilms(count);
     }
 }

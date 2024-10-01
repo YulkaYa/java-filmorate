@@ -1,13 +1,10 @@
-package ru.yandex.practicum.filmorate;
+package ru.yandex.practicum.filmorate.model;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ru.yandex.practicum.filmorate.model.Create;
-import ru.yandex.practicum.filmorate.model.Update;
-import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -24,27 +21,27 @@ class UserTest {
             .email("mail@gmail.com")
             .birthday(LocalDate.of(1995, 12, 28))
             .build();
-    private final User userUpdate = userCreate.toBuilder()
+    private final User userUpdate = this.userCreate.toBuilder()
             .id(1L)
             .build();
     private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     @Test
-    void createOkWhenIdNullTest() {
-        final User userTest = userCreate.toBuilder().id(null).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
+    protected void createOkWhenIdNullTest() {
+        User userTest = this.userCreate.toBuilder().id(null).build();
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(userTest,
                 Create.class));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void createFailedWhenIdNotNullTest() {
-        User userTest = userCreate.toBuilder().id(1000L).build();
+    protected void createFailedWhenIdNotNullTest() {
+        final User userTest = this.userCreate.toBuilder().id(1000L).build();
 
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(userTest,
                 Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id при создании должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -56,12 +53,12 @@ class UserTest {
     }
 
     @Test
-    void updateFailWhenIdNullTest() {
-        final User userTest = userUpdate.toBuilder().id(null).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest,
+    protected void updateFailWhenIdNullTest() {
+        User userTest = this.userUpdate.toBuilder().id(null).build();
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(userTest,
                 Update.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id при обновлении не должен быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -73,11 +70,11 @@ class UserTest {
     }
 
     @Test
-    void updateFailedWhenIdZeroTest() {
-        User userTest = userUpdate.toBuilder().id(0L).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
+    protected void updateFailedWhenIdZeroTest() {
+        final User userTest = this.userUpdate.toBuilder().id(0L).build();
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -89,11 +86,11 @@ class UserTest {
     }
 
     @Test
-    void updateFailedWhenIdNegativeTest() {
-        User userTest = userUpdate.toBuilder().id(-1L).build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(userTest));
+    protected void updateFailedWhenIdNegativeTest() {
+        final User userTest = this.userUpdate.toBuilder().id(-1L).build();
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "id", "Id должен быть положительным целым числом");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -105,14 +102,14 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginNullTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createFailedWhenLoginNullTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .login(null)
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -124,16 +121,16 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginAbsentTest() {
-        User userTest = User.builder()
-                .name(userCreate.getName())
-                .email(userCreate.getEmail())
-                .birthday(userCreate.getBirthday())
+    protected void createFailedWhenLoginAbsentTest() {
+        final User userTest = User.builder()
+                .name(this.userCreate.getName())
+                .email(this.userCreate.getEmail())
+                .birthday(this.userCreate.getBirthday())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -145,14 +142,14 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginEmptyTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createFailedWhenLoginEmptyTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .login("")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -164,14 +161,14 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenLoginBlankTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createFailedWhenLoginBlankTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .login(" ")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -183,36 +180,36 @@ class UserTest {
     }
 
     @Test
-    void updateOkWhenLoginNullTest() {
-        User userTest = userUpdate.toBuilder()
+    protected void updateOkWhenLoginNullTest() {
+        final User userTest = this.userUpdate.toBuilder()
                 .login(null)
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void updateOkWhenLoginAbsentTest() {
-        User userTest = User.builder()
-                .name(userCreate.getName())
-                .email(userCreate.getEmail())
-                .birthday(userCreate.getBirthday())
+    protected void updateOkWhenLoginAbsentTest() {
+        final User userTest = User.builder()
+                .name(this.userCreate.getName())
+                .email(this.userCreate.getEmail())
+                .birthday(this.userCreate.getBirthday())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginEmptyTest() {
-        User userTest = userUpdate.toBuilder()
+    protected void createOrUpdateFailedWhenLoginEmptyTest() {
+        final User userTest = this.userUpdate.toBuilder()
                 .login("")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -224,14 +221,14 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginBlankTest() {
-        User userTest = userUpdate.toBuilder()
+    protected void createOrUpdateFailedWhenLoginBlankTest() {
+        final User userTest = this.userUpdate.toBuilder()
                 .login(" ")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -243,14 +240,14 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenLoginContainsSpacesTest() {
-        User userTest = userUpdate.toBuilder()
+    protected void createOrUpdateFailedWhenLoginContainsSpacesTest() {
+        final User userTest = this.userUpdate.toBuilder()
                 .login("login login")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "login", "Логин не может содержать пробелы или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -263,14 +260,14 @@ class UserTest {
 
 
     @Test
-    void createFailedWhenEmailNullTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createFailedWhenEmailNullTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .email(null)
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта не может быть пустой");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -282,16 +279,16 @@ class UserTest {
     }
 
     @Test
-    void createFailedWhenEmailAbsentTest() {
-        User userTest = User.builder()
-                .name(userCreate.getName())
-                .birthday(userCreate.getBirthday())
-                .login(userCreate.getLogin())
+    protected void createFailedWhenEmailAbsentTest() {
+        final User userTest = User.builder()
+                .name(this.userCreate.getName())
+                .birthday(this.userCreate.getBirthday())
+                .login(this.userCreate.getLogin())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest, Create.class));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта не может быть пустой");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -304,14 +301,14 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenEmailNotFitPatternTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateFailedWhenEmailNotFitPatternTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .email("@mail.ru")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "email", "Электронная почта должна содержать символ @ и соответствовать правилам " +
                 "названия email");
         assertEquals(
@@ -325,49 +322,49 @@ class UserTest {
 
 
     @Test
-    void updateOkWhenEmailNullTest() {
-        User userTest = userUpdate.toBuilder()
+    protected void updateOkWhenEmailNullTest() {
+        final User userTest = this.userUpdate.toBuilder()
                 .email(null)
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void updateOkWhenEmailAbsentTest() {
-        User userTest = User.builder()
-                .id(userUpdate.getId())
-                .login(userUpdate.getLogin())
-                .birthday(userUpdate.getBirthday())
-                .name(userUpdate.getName())
+    protected void updateOkWhenEmailAbsentTest() {
+        final User userTest = User.builder()
+                .id(this.userUpdate.getId())
+                .login(this.userUpdate.getLogin())
+                .birthday(this.userUpdate.getBirthday())
+                .name(this.userUpdate.getName())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void createOrUpdateOkWhenNameContainsSpacesTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateOkWhenNameContainsSpacesTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .name("name null")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
         assertEquals("name null", userTest.getName());
-        assertEquals(userCreate.getLogin(), userTest.getLogin());
+        assertEquals(this.userCreate.getLogin(), userTest.getLogin());
     }
 
     @Test
-    void createOrUpdateFailedWhenNameBlankTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateFailedWhenNameBlankTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .name("")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -379,14 +376,14 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateFailedWhenNameContainsOnlySpacesTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateFailedWhenNameContainsOnlySpacesTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .name(" ")
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -398,46 +395,46 @@ class UserTest {
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayAbsentTest() {
-        User userTest = User.builder()
-                .name(userCreate.getName())
-                .login(userCreate.getLogin())
-                .email(userCreate.getEmail())
+    protected void createOrUpdateOkWhenBirthdayAbsentTest() {
+        final User userTest = User.builder()
+                .name(this.userCreate.getName())
+                .login(this.userCreate.getLogin())
+                .email(this.userCreate.getEmail())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayNullTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateOkWhenBirthdayNullTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .birthday(null)
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(0, violations.size());
     }
 
     @Test
-    void createOrUpdateOkWhenBirthdayInPresentTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateOkWhenBirthdayInPresentTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .birthday(LocalDate.now())
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
     }
 
     @Test
-    void createOrUpdateFailedWhenBirthdayInFutureTest() {
-        User userTest = userCreate.toBuilder()
+    protected void createOrUpdateFailedWhenBirthdayInFutureTest() {
+        final User userTest = this.userCreate.toBuilder()
                 .birthday(LocalDate.now().plusDays(1))
                 .build();
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 userTest));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "birthday", "Дата рождения не может быть в будущем");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -449,16 +446,16 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateFailedFieldNameEmptyTest() {
-        final User userTest = userUpdate.toBuilder().build();
-        final User newUserTest = userUpdate.toBuilder()
+    protected void checkUpdateFailedFieldNameEmptyTest() {
+        User userTest = this.userUpdate.toBuilder().build();
+        User newUserTest = this.userUpdate.toBuilder()
                 .name("")
                 .build();
-        User updatedUser = User.buildNewUser(userTest, newUserTest);
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final User updatedUser = User.buildNewUser(userTest, newUserTest);
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 updatedUser));
         assertEquals(1, violations.size());
-        ExpectedViolation expectedViolation = new ExpectedViolation(
+        final ExpectedViolation expectedViolation = new ExpectedViolation(
                 "name", "Имя не может состоять из пробелов или быть пустым");
         assertEquals(
                 expectedViolation.propertyPath,
@@ -470,13 +467,13 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldNameNotEmptyTest() {
-        final User userTest = userUpdate.toBuilder().build();
-        final User newUserTest = userUpdate.toBuilder()
+    protected void checkUpdateOkFieldNameNotEmptyTest() {
+        User userTest = this.userUpdate.toBuilder().build();
+        User newUserTest = this.userUpdate.toBuilder()
                 .name("fgtrytr")
                 .build();
-        User updatedUser = User.buildNewUser(userTest, newUserTest);
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final User updatedUser = User.buildNewUser(userTest, newUserTest);
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 updatedUser));
         assertEquals(0, violations.size());
         assertEquals(userTest.getId(), updatedUser.getId());
@@ -487,17 +484,17 @@ class UserTest {
     }
 
     @Test
-    void checkUpdateOkFieldsNotEmptyTest() {
-        final User userTest = userUpdate.toBuilder().build();
-        final User newUserTest = User.builder()
+    protected void checkUpdateOkFieldsNotEmptyTest() {
+        User userTest = this.userUpdate.toBuilder().build();
+        User newUserTest = User.builder()
                 .id(userTest.getId())
                 .name("sdfsdfsdf")
                 .email("saddasd@mail.ru")
                 .login("sdsds")
                 .birthday(LocalDate.now().minusYears(10))
                 .build();
-        User updatedUser = User.buildNewUser(userTest, newUserTest);
-        List<ConstraintViolation<User>> violations = new ArrayList<>(validator.validate(
+        final User updatedUser = User.buildNewUser(userTest, newUserTest);
+        final List<ConstraintViolation<User>> violations = new ArrayList<>(this.validator.validate(
                 updatedUser));
         assertEquals(0, violations.size());
         assertEquals(newUserTest.getId(), updatedUser.getId());

@@ -18,8 +18,8 @@ import ru.yandex.practicum.filmorate.model.ErrorResponse;
 public class ExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundException e) {
-        log.error("404 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
+        ExceptionHandler.log.error("404 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(e.getMessage()));
@@ -27,8 +27,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleValidationException(final ValidationException e) {
-        log.error("400 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleValidationException(ValidationException e) {
+        ExceptionHandler.log.error("400 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
@@ -36,8 +36,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(final HandlerMethodValidationException e) {
-        log.error("400 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException e) {
+        ExceptionHandler.log.error("400 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
@@ -45,8 +45,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
-        log.error("400 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        ExceptionHandler.log.error("400 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
@@ -54,8 +54,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(final IllegalArgumentException e) {
-        log.error("400 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e) {
+        ExceptionHandler.log.error("400 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
@@ -63,8 +63,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ResponseEntity<ErrorResponse> handleDuplicatedDataException(final DuplicatedDataException e) {
-        log.error("409 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleDuplicatedDataException(DuplicatedDataException e) {
+        ExceptionHandler.log.error("409 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(e.getMessage()));
@@ -72,8 +72,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleIllegalAccessToModelException(final IllegalAccessToModelException e) {
-        log.error("500 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleIllegalAccessToModelException(IllegalAccessToModelException e) {
+        ExceptionHandler.log.error("500 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(e.getMessage()));
@@ -81,8 +81,8 @@ public class ExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ResponseEntity<ErrorResponse> handleThrowableException(final Throwable e) {
-        log.error("500 {}", e.getMessage());
+    public ResponseEntity<ErrorResponse> handleThrowableException(Throwable e) {
+        ExceptionHandler.log.error("500 {}", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ErrorResponse(e.getMessage()));

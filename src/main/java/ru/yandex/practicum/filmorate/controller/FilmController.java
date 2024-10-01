@@ -1,7 +1,7 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
+import jakarta.validation.constraints.Positive;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,66 +24,62 @@ import java.util.List;
 @RestController
 @RequestMapping("/films")
 public class FilmController {
-    private FilmService filmService;
+    private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmService service) {
+    public FilmController(final FilmService service) {
         this.filmService = service;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Film> getAll() {
-        log.info("Получаем список всех фильмов");
-        return filmService.getAll();
+        FilmController.log.info("Получаем список всех фильмов");
+        return this.filmService.getAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Film get(@PathVariable Long id) {
-        log.info("Получаем фильм с id=" + id);
-        return filmService.get(id);
+    public Film get(@PathVariable final Long id) {
+        FilmController.log.info("Получаем фильм с id={}", id);
+        return this.filmService.get(id);
     }
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
-    public List<Film> topFilms(@RequestParam(defaultValue = "10") int count) {
-        log.info("Получаем список из " + count + " самых популярных фильмов");
-        if (count <= 0) {
-            throw new ValidationException("Параметр count должен быть больше нуля;");
-        } else {
-            return filmService.topFilms(count);
-        }
+    public List<Film> topFilms(@RequestParam(defaultValue = "10") @Positive(message = "Параметр count должен быть больше нуля;") final Long count) {
+        FilmController.log.info("Получаем список из {} самых популярных фильмов", count);
+        return this.filmService.topFilms(count);
     }
 
     @PostMapping
     @Validated(Create.class)
     @ResponseStatus(HttpStatus.CREATED)
-    public Film create(@Valid @RequestBody Film film) {
-        log.info("Создаем новый фильм с id=" + film.getId());
-        return filmService.create(film);
+    public Film create(@Valid @RequestBody final Film film) {
+        FilmController.log.info("Создаем новый фильм с id={}", film.getId());
+        return this.filmService.create(film);
     }
 
     @PutMapping
     @Validated(Update.class)
     @ResponseStatus(HttpStatus.OK)
-    public Film update(@Valid @RequestBody Film newFilm) {
-        log.info("Обновляем фильм с id=" + newFilm.getId());
-        return filmService.update(newFilm);
+    public Film update(@Valid @RequestBody final Film newFilm) {
+        FilmController.log.info("Обновляем фильм с id={}", newFilm.getId());
+        return this.filmService.update(newFilm);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping("/{filmId}/like/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void putLike(@PathVariable Long id, @PathVariable Long userId) {
-        log.info("Добавляем лайк к фильму с id=" + id + " от юзера с id=" + userId);
-        filmService.putLike(id, userId);
+    public void putLike(@PathVariable final Long filmId, @PathVariable final Long userId) {
+        FilmController.log.info("Добавляем лайк к фильму с id={} от юзера с id={}", filmId, userId);
+        this.filmService.putLike(userId, filmId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping("/{filmId}/like/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteLike(@PathVariable Long id, @PathVariable Long userId) {
-        log.info("Удаляем лайк к фильму с id=" + id + " от юзера с id=" + userId);
-        filmService.deleteLike(id, userId);
+    public void deleteLike(@PathVariable final Long filmId, @PathVariable final Long id) {
+        FilmController.log.info("Удаляем лайк к фильму с id={} от юзера с id={}", filmId, id);
+        this.filmService.deleteLike(id, filmId);
     }
 }
 

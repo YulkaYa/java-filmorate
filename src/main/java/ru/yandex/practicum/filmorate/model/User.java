@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 import ru.yandex.practicum.filmorate.exception.IllegalAccessToModelException;
@@ -16,9 +15,7 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * User.
@@ -36,8 +33,6 @@ import java.util.Set;
 @Slf4j
 public class User extends StorageData {
 
-    @Singular
-    private final Set<Long> friends = new HashSet<>();
     @NotBlank(groups = Create.class, message = "Логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "Логин не может содержать пробелы или быть пустым")
     private String login;
@@ -51,29 +46,29 @@ public class User extends StorageData {
 
     /*Копируем в новый объект userBuilder сначала поля oldUser(тот, которого хотим обновить), затем добавляем только
     обновленную информацию из newUser*/
-    public static User buildNewUser(User oldUser, User newUser) {
+    public static User buildNewUser(final User oldUser, final User newUser) {
         if (!oldUser.getId().equals(newUser.getId())) {
             throw new NotFoundException("Id пользователей не совпали");
         }
-        UserBuilder userBuilder = oldUser.toBuilder();
+        final UserBuilder userBuilder = oldUser.toBuilder();
         // Получаем суперкласс билдера со всеми полями
-        Class classWithDeclaredFields = userBuilder.getClass().getSuperclass();
-        List<Field> fieldsOfBuilderFromUser = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
-        List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
+        final Class classWithDeclaredFields = userBuilder.getClass().getSuperclass();
+        final List<Field> fieldsOfBuilderFromUser = new ArrayList<>(List.of(classWithDeclaredFields.getDeclaredFields()));
+        final List<Field> fieldsOfBuilderFromStorageData = List.of(classWithDeclaredFields.getSuperclass().getDeclaredFields());
 
 
-        List<Field> fieldsOfUser = List.of(newUser.getClass().getDeclaredFields());
+        final List<Field> fieldsOfUser = List.of(newUser.getClass().getDeclaredFields());
         fieldsOfBuilderFromUser.addAll(fieldsOfBuilderFromStorageData);
-        List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromUser);
+        final List<Field> fieldsOfBuilder = new ArrayList<>(fieldsOfBuilderFromUser);
 
-        for (Field field : fieldsOfUser) {
-            for (Field field1 : fieldsOfBuilder) {
+        for (final Field field : fieldsOfUser) {
+            for (final Field field1 : fieldsOfBuilder) {
                 if (field1.getName().equals(field.getName())) {
                     try {
-                        if (field.get(newUser) != null) {
+                        if (null != field.get(newUser)) {
                             field1.set(userBuilder, field.get(newUser));
                         }
-                    } catch (IllegalAccessException e) {
+                    } catch (final IllegalAccessException e) {
                         throw new IllegalAccessToModelException("Ошибка при обновлении данных пользователя");
                     }
                     break;
@@ -83,20 +78,20 @@ public class User extends StorageData {
         return userBuilder.build();
     }
 
-    private void setLogin(String login) {
+    private void setLogin(final String login) {
         this.login = login;
-        replaceBlankNameWithLogin();
+        this.replaceBlankNameWithLogin();
     }
 
-    private void setName(String name) {
+    private void setName(final String name) {
         this.name = name;
-        replaceBlankNameWithLogin();
+        this.replaceBlankNameWithLogin();
     }
 
     private void replaceBlankNameWithLogin() {
-        String nameOfUser = this.getName();
-        if (nameOfUser == null || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
-            this.setName(this.getLogin());
+        final String nameOfUser = this.name;
+        if (null == nameOfUser || nameOfUser.isEmpty() || nameOfUser.isBlank()) {
+            this.setName(this.login);
         }
     }
 }
